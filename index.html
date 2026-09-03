@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canada Sports Betting | Best Seats to Catch a Home Run at Every MLB Ballpark</title>
+<meta name="description" content="Search any MLB team to see which real seating sections caught the most home runs in 2025, built by Canada Sports Betting from Statcast and seating chart data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #101820;
+  --navy-2: #152630;
+  --red: #ce1126;
+  --red-bright: #ff3b4e;
+  --red-dark: #9c0d1d;
+  --red-soft: #ffe9ea;
+  --ink: #18242b;
+  --muted: #607078;
+  --line: #d8e2de;
+  --paper: #f5f8f6;
+  --white: #ffffff;
+  --display: "Barlow Condensed", Arial, sans-serif;
+  --serif: "Source Serif 4", Georgia, serif;
+  --shadow: 0 18px 45px rgba(16, 24, 32, 0.09);
+  --tight: cubic-bezier(.2, .72, .2, 1);
+  --page-gutter: clamp(16px, 3.5vw, 36px);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); font-family: var(--serif);
+  font-size: clamp(15.5px, 1.3vw, 17px); line-height: 1.62;
+}
+a { color: var(--red-dark); }
+.wrap { width: calc(100% - var(--page-gutter) - var(--page-gutter)); max-width: 1100px; margin-inline: auto; }
+.band-dark { background: var(--navy); color: #fff; border-bottom: 5px solid var(--red); }
+.band-inner { padding: clamp(28px, 4vw, 48px) 0; }
+.eyebrow { font-family: var(--display); font-size: 13px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--red-bright); margin: 0 0 14px; }
+h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: clamp(34px, 5vw, 58px); line-height: 1.02; letter-spacing: -.02em; }
+.dek { max-width: 720px; margin: 18px 0 0; color: rgba(255,255,255,.76); font-size: clamp(16px, 1.4vw, 19px); }
+.dek a { color: #ffb3ba; }
+.pilot-tag { display: inline-block; margin-top: 18px; padding: 6px 12px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); border-radius: 4px; font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.8); }
+
+.section { padding: clamp(44px, 6vw, 72px) 0; }
+.section.white { background: #fff; }
+.section.tint { background: var(--paper); }
+.section-kicker { font-family: var(--display); color: var(--red-dark); font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 10px; }
+h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(28px, 3.6vw, 42px); letter-spacing: -.015em; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 20px; margin: 0 0 10px; }
+.rule { width: 64px; height: 5px; background: var(--red); margin: 18px 0; }
+.section-intro { max-width: 780px; color: var(--muted); font-size: clamp(15.5px, 1.2vw, 17.5px); margin: 0; }
+.section-intro a { color: var(--red-dark); text-decoration: underline; }
+
+/* Team search / calculator */
+.calc-box { margin-top: 30px; border: 1px solid var(--line); border-radius: 12px; background: #fff; box-shadow: var(--shadow); padding: 22px 24px; }
+.calc-label { font-family: var(--display); font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.search-row { position: relative; display: flex; gap: 10px; }
+#team-input { flex: 1; padding: 14px 16px; border: 2px solid var(--line); border-radius: 8px; font-family: var(--serif); font-size: 16px; color: var(--ink); background: #fff; }
+#team-input:focus { outline: none; border-color: var(--red); }
+#team-clear { display: none; padding: 0 18px; border: none; background: var(--navy); color: #fff; border-radius: 8px; font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; }
+#team-dropdown { position: absolute; top: calc(100% + 6px); left: 0; right: 96px; background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); max-height: 280px; overflow-y: auto; z-index: 30; display: none; }
+#team-dropdown.open { display: block; }
+.team-opt { padding: 11px 16px; cursor: pointer; font-size: 15px; border-bottom: 1px solid #eef1f0; display: flex; justify-content: space-between; gap: 10px; }
+.team-opt:last-child { border-bottom: none; }
+.team-opt:hover, .team-opt.hi { background: var(--red-soft); }
+.team-opt small { color: var(--muted); font-family: var(--display); text-transform: uppercase; letter-spacing: .04em; font-size: 11px; }
+.quick-teams { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.quick-chip { font-family: var(--display); font-size: 12.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; }
+.quick-chip:hover { border-color: var(--red); color: var(--red-dark); }
+
+#result-wrap { display: none; margin-top: 8px; }
+.venue-title-row { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 34px 0 4px; }
+.venue-title-row h2 { font-size: clamp(24px, 3vw, 34px); }
+.venue-sub { color: var(--muted); font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+
+.diagram-shell { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(260px, .9fr); gap: 28px; margin-top: 24px; align-items: start; }
+.diagram-card { border: 1px solid var(--line); border-radius: 10px; background: var(--navy); overflow: hidden; box-shadow: var(--shadow); }
+.diagram-head { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.1); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.diagram-head span { font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+#field-svg-wrap { padding: 10px 12px 4px; }
+svg#field { width: 100%; height: auto; display: block; overflow: visible; }
+.section-wedge {
+  cursor: pointer;
+  transition: opacity .15s ease, stroke-width .15s ease, filter .15s ease, transform .15s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.section-wedge:hover { opacity: .96; filter: brightness(1.06); transform: scale(1.035); }
+.section-wedge:focus { outline: none; stroke: #fff; stroke-width: 3; }
+.section-wedge.is-active {
+  stroke: #fff;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 7px rgba(255,255,255,.55));
+}
+.section-link { stroke: rgba(255,255,255,.28); stroke-width: 1.25; stroke-dasharray: 3 4; pointer-events: none; }
+.section-anchor { fill: rgba(255,255,255,.72); pointer-events: none; }
+.stack-link { stroke: #ffd166; stroke-width: 1.75; stroke-dasharray: none; pointer-events: none; }
+.stack-badge { fill: #ffd166; pointer-events: none; }
+.stack-badge-text { font-family: var(--display); font-size: 7.5px; font-weight: 800; fill: #101820; pointer-events: none; text-anchor: middle; }
+.field-label { font-family: var(--display); font-size: 9px; font-weight: 700; fill: rgba(255,255,255,.58); pointer-events: none; }
+.wall-outline { fill: none; stroke: rgba(255,255,255,.38); stroke-width: 2; }
+.foul-line { stroke: rgba(255,255,255,.28); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.home-plate { fill: #fff; }
+
+.legend { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-top: 1px solid rgba(255,255,255,.1); flex-wrap: wrap; }
+.legend-scale { flex: 1; min-width: 60px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, rgba(206,17,38,.18), var(--red-bright)); }
+.legend-label { font-family: var(--display); font-size: 10px; font-weight: 700; color: rgba(255,255,255,.55); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+.legend-stack { display: flex; align-items: center; gap: 6px; font-family: var(--display); font-size: 10px; font-weight: 700; color: rgba(255,255,255,.7); text-transform: uppercase; letter-spacing: .05em; white-space: nowrap; }
+.legend-stack .swatch { width: 16px; height: 3px; background: #ffd166; border-radius: 2px; }
+
+.detail-panel { border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: var(--shadow); padding: 22px; min-height: 320px; }
+.detail-empty { color: var(--muted); font-size: 14.5px; text-align: center; padding: 40px 10px; }
+.detail-rank { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 6px; background: var(--red); color: #fff; font-family: var(--display); font-weight: 800; font-size: 15px; }
+.detail-name { margin: 12px 0 2px; font-family: var(--display); font-weight: 700; font-size: 20px; color: var(--ink); }
+.detail-stat { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; }
+.detail-stat b { font-family: var(--display); font-size: 26px; font-weight: 800; color: var(--red-dark); }
+.detail-stat span { font-family: var(--display); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.detail-stack-note { margin-top: 14px; padding: 10px 12px; background: #fff8e6; border: 1px solid #f3dfa3; border-radius: 6px; font-size: 13px; color: #6b5a1f; }
+
+.leaderboard { margin-top: 30px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; box-shadow: var(--shadow); max-height: 480px; overflow-y: auto; }
+.lb-row { display: grid; grid-template-columns: 44px minmax(0,1fr) 100px; gap: 12px; align-items: center; padding: 12px 18px; border-bottom: 1px solid #eef1f0; }
+.lb-row:last-child { border-bottom: none; }
+.lb-row:nth-child(even) { background: #f8fbf9; }
+.lb-row.is-highlighted { background: var(--red-soft); }
+.lb-rank { font-family: var(--display); font-weight: 800; font-size: 17px; color: var(--red-dark); }
+.lb-name { font-family: var(--display); font-weight: 600; font-size: 15px; }
+.lb-count { font-family: var(--display); font-weight: 800; font-size: 15px; text-align: right; }
+
+.method-box { margin-top: 22px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--muted); font-size: 14.5px; line-height: 1.65; }
+.method-box strong { color: var(--ink); }
+.method-box a { color: var(--red-dark); }
+
+.betting-panel { margin-top: 34px; padding: 26px 28px; border-radius: 12px; background: var(--navy); color: rgba(255,255,255,.85); }
+.betting-panel h3 { color: #fff; font-size: 22px; }
+.betting-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; margin-top: 16px; }
+.betting-link { display: block; padding: 14px 16px; border-radius: 8px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); color: #fff; text-decoration: none; font-family: var(--display); font-weight: 700; font-size: 14.5px; letter-spacing: .01em; transition: background .15s ease, border-color .15s ease; }
+.betting-link:hover { background: rgba(255,255,255,.12); border-color: var(--red-bright); }
+.betting-link span { display: block; font-family: var(--serif); font-weight: 400; font-size: 13px; color: rgba(255,255,255,.62); margin-top: 4px; }
+
+.footer { padding: 26px 0; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+.footer a { color: var(--muted); }
+
+@media (max-width: 800px) {
+  .diagram-shell { grid-template-columns: 1fr; }
+  .betting-grid { grid-template-columns: 1fr; }
+  #team-dropdown { right: 0; }
+}
+</style>
+</head>
+<body>
+<header class="band-dark">
+  <div class="wrap band-inner">
+    <p class="eyebrow">MLB &middot; Home Run Analysis</p>
+    <h1>Best Seats to Catch a Home Run at Every MLB Ballpark</h1>
+    <p class="dek"><a href="https://www.canadasportsbetting.ca/">Canada Sports Betting</a> tracked every home run hit during the 2025 regular season across 28 MLB ballparks and matched each ball's landing spot to the nearest real seating section. Search your team below to see exactly where the souvenirs land.</p>
+    <span class="pilot-tag">28 ballparks &middot; 2025 regular season &middot; Statcast + seating chart data</span>
+  </div>
+</header>
+
+<main>
+  <section class="section white">
+    <div class="wrap">
+      <p class="section-kicker">Home Run Landing Spot Calculator</p>
+      <h2>Find Your Team's Best Home Run Seats</h2>
+      <div class="rule"></div>
+      <p class="section-intro">Type a team name, city, or ballpark below. The calculator pulls up every real seating section at that stadium, ranked by how many 2025 home runs landed nearest to it, based on MLB's own Statcast tracking data matched against each ballpark's public seating chart. Toronto Blue Jays fans can jump straight to the <a href="#rogers-centre-note">Rogers Centre breakdown</a> further down.</p>
+
+      <div class="calc-box">
+        <p class="calc-label">Search by team, city, or ballpark</p>
+        <div class="search-row">
+          <input type="text" id="team-input" placeholder="e.g. Blue Jays, Toronto, Yankee Stadium..." autocomplete="off">
+          <button id="team-clear" type="button">Clear</button>
+        </div>
+        <div id="team-dropdown"></div>
+        <div class="quick-teams" id="quick-teams"></div>
+      </div>
+
+      <div id="result-wrap">
+        <div class="venue-title-row">
+          <h2 id="result-venue-name"></h2>
+          <span class="venue-sub" id="result-venue-sub"></span>
+        </div>
+
+        <div class="diagram-shell">
+          <div class="diagram-card">
+            <div class="diagram-head">
+              <span id="diagram-title"></span>
+              <span id="active-section-label" style="color:#fff;">Select a section</span>
+            </div>
+            <div id="field-svg-wrap"></div>
+            <div class="legend">
+              <span class="legend-label">Fewer HRs</span>
+              <div class="legend-scale"></div>
+              <span class="legend-label">More HRs</span>
+              <span class="legend-stack"><span class="swatch"></span>Stacked sections</span>
+            </div>
+          </div>
+          <div class="detail-panel" id="detail-panel">
+            <div class="detail-empty">Click any section on the diagram to see its 2025 home run count.</div>
+          </div>
+        </div>
+
+        <div class="leaderboard" id="leaderboard"></div>
+
+        <div class="method-box" id="method-box"></div>
+      </div>
+
+      <div class="betting-panel">
+        <h3>Betting on the next home stand?</h3>
+        <p style="margin:0 0 4px; color:rgba(255,255,255,.72); font-size:14.5px;">Wherever the home run lands, here's where to line up the bet first. Canada Sports Betting keeps its sportsbook reviews and provincial rules current across the country.</p>
+        <div class="betting-grid">
+          <a class="betting-link" href="https://www.canadasportsbetting.ca/">Canada Sports Betting home<span>Sportsbook reviews, odds, and MLB betting guides for Canadian bettors</span></a>
+          <a class="betting-link" href="https://www.canadasportsbetting.ca/online-sportsbook-reviews/mobile-apps/">Best betting apps in Canada<span>Compare the mobile sportsbooks taking MLB action nationwide</span></a>
+          <a class="betting-link" href="https://www.canadasportsbetting.ca/gambling-laws/ontario/">Ontario sports betting rules<span>What's legal for Blue Jays fans betting from Ontario</span></a>
+          <a class="betting-link" href="https://www.canadasportsbetting.ca/gambling-laws/alberta/">Alberta sports betting rules<span>Provincial betting law for fans wagering from Alberta</span></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section tint" id="rogers-centre-note">
+    <div class="wrap">
+      <p class="section-kicker">Home Ballpark Spotlight</p>
+      <h2>Rogers Centre: 59 Sections, No Runaway Winner</h2>
+      <div class="rule"></div>
+      <p class="section-intro" style="margin-top:14px;">Rogers Centre logged 222 tracked home runs in 2025 across 59 named sections, the most sections of any park in this analysis, and none of them dominates. The top spot, general admission standing room out in centre field, accounts for just 10 of those 222 balls. Search "Blue Jays" above to load the full breakdown, including the suite tiers in right field where several sections sit almost directly on top of one another.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">Source: Canada Sports Betting analysis of 2025 MLB Statcast home run tracking data and public seating chart data for 28 MLB ballparks.</div>
+</footer>
+
+<script>
+const BALLPARKS = {"American Family Field":{"team":"Milwaukee Brewers","wall":[{"angle":-45,"dist":344},{"angle":-20,"dist":371},{"angle":0,"dist":400},{"angle":20,"dist":374},{"angle":45,"dist":345}],"sections":[{"section":"ASSOCIATED BANK POWER ALLEY","angle":-16.01,"dist":410.4,"hr":31,"rank":1},{"section":"J LEINENKUGLES BARREL YARD BULLPEN TABLES","angle":-17.94,"dist":397.2,"hr":18,"rank":2},{"section":"TOYOTA TERRITORY FRONT ROW","angle":11.3,"dist":412.0,"hr":17,"rank":3},{"section":"BREW ROOM","angle":-26.42,"dist":402.6,"hr":12,"rank":4},{"section":"TOYOTA TERRITORY","angle":12.53,"dist":405.9,"hr":11,"rank":5},{"section":"201","angle":21.49,"dist":403.6,"hr":9,"rank":6},{"section":"102","angle":27.85,"dist":388.0,"hr":7,"rank":7},{"section":"203","angle":31.63,"dist":380.5,"hr":6,"rank":8},{"section":"J LEINENKUGLES BARREL YARD","angle":-32.23,"dist":396.2,"hr":6,"rank":8},{"section":"236","angle":-31.38,"dist":399.2,"hr":5,"rank":10},{"section":"442","angle":-39.96,"dist":375.4,"hr":5,"rank":10},{"section":"205","angle":43.5,"dist":367.8,"hr":4,"rank":12},{"section":"235","angle":-36.69,"dist":394.8,"hr":4,"rank":12},{"section":"MILLER LITE LANDING","angle":-26.69,"dist":397.5,"hr":4,"rank":12},{"section":"103","angle":34.7,"dist":371.0,"hr":3,"rank":15},{"section":"104","angle":41.06,"dist":387.0,"hr":3,"rank":15},{"section":"202","angle":25.57,"dist":395.7,"hr":3,"rank":15},{"section":"234","angle":-42.07,"dist":396.0,"hr":3,"rank":15},{"section":"302","angle":34.36,"dist":376.7,"hr":3,"rank":15},{"section":"441","angle":-44.46,"dist":376.7,"hr":3,"rank":15},{"section":"101","angle":23.74,"dist":391.0,"hr":2,"rank":21},{"section":"303","angle":37.31,"dist":385.5,"hr":2,"rank":21},{"section":"AURORA HEALTH CARE","angle":32.47,"dist":358.0,"hr":2,"rank":21},{"section":"204","angle":37.64,"dist":354.0,"hr":1,"rank":24},{"section":"304","angle":40.64,"dist":378.0,"hr":1,"rank":24},{"section":"305","angle":43.45,"dist":358.0,"hr":1,"rank":24},{"section":"LOFT","angle":25.24,"dist":396.0,"hr":1,"rank":24}]},"Angel Stadium":{"team":"Los Angeles Angels","wall":[{"angle":-45,"dist":330},{"angle":-20,"dist":372},{"angle":0,"dist":396},{"angle":20,"dist":370},{"angle":45,"dist":330}],"sections":[{"section":"256","angle":-21.76,"dist":415.1,"hr":52,"rank":1},{"section":"249","angle":8.7,"dist":417.9,"hr":35,"rank":2},{"section":"259","angle":-34.63,"dist":404.4,"hr":17,"rank":3},{"section":"260","angle":-39.57,"dist":398.4,"hr":13,"rank":4},{"section":"247","angle":16.92,"dist":396.1,"hr":12,"rank":5},{"section":"242","angle":39.36,"dist":389.9,"hr":11,"rank":6},{"section":"258","angle":-29.3,"dist":401.7,"hr":10,"rank":7},{"section":"101","angle":-42.27,"dist":376.2,"hr":9,"rank":8},{"section":"237","angle":26.31,"dist":392.0,"hr":8,"rank":9},{"section":"257","angle":-24.9,"dist":414.0,"hr":8,"rank":9},{"section":"243","angle":34.78,"dist":392.9,"hr":7,"rank":11},{"section":"248","angle":12.14,"dist":395.4,"hr":7,"rank":11},{"section":"236","angle":31.7,"dist":388.2,"hr":5,"rank":13},{"section":"244","angle":31.16,"dist":383.0,"hr":5,"rank":13},{"section":"201","angle":-44.62,"dist":370.5,"hr":4,"rank":15},{"section":"238","angle":20.22,"dist":405.2,"hr":4,"rank":15},{"section":"240","angle":10.09,"dist":402.5,"hr":4,"rank":15},{"section":"245","angle":26.77,"dist":388.0,"hr":4,"rank":15},{"section":"135","angle":42.27,"dist":367.5,"hr":2,"rank":19},{"section":"233","angle":44.05,"dist":368.0,"hr":2,"rank":19},{"section":"241","angle":42.45,"dist":386.5,"hr":2,"rank":19},{"section":"246","angle":21.8,"dist":389.5,"hr":2,"rank":19},{"section":"351","angle":45.7,"dist":363.0,"hr":2,"rank":19},{"section":"GA SRO","angle":13.73,"dist":398.0,"hr":1,"rank":24}]},"Busch Stadium":{"team":"St. Louis Cardinals","wall":[{"angle":-45,"dist":336},{"angle":-20,"dist":375},{"angle":0,"dist":400},{"angle":20,"dist":375},{"angle":45,"dist":335}],"sections":[{"section":"COCA COLA PATIO","angle":16.94,"dist":411.4,"hr":10,"rank":1},{"section":"DECK","angle":-2.02,"dist":420.7,"hr":10,"rank":1},{"section":"BLEACHERS 107","angle":24.2,"dist":395.3,"hr":9,"rank":3},{"section":"BLEACHERS 111","angle":35.84,"dist":400.1,"hr":8,"rank":4},{"section":"CARDINALS NATION ROOFTOP 1","angle":-29.15,"dist":397.1,"hr":8,"rank":4},{"section":"BLEACHERS 195","angle":-12.89,"dist":408.2,"hr":6,"rank":6},{"section":"BLEACHERS 109","angle":29.79,"dist":389.6,"hr":5,"rank":7},{"section":"BOX 128","angle":40.23,"dist":399.6,"hr":5,"rank":7},{"section":"BOX 172","angle":-34.1,"dist":381.2,"hr":5,"rank":7},{"section":"FIELD PAVILION 372","angle":-41.82,"dist":385.6,"hr":5,"rank":7},{"section":"BALCONY","angle":-29.82,"dist":395.2,"hr":4,"rank":11},{"section":"BET 365 BRIDGE","angle":31.04,"dist":383.8,"hr":4,"rank":11},{"section":"BLEACHERS 101","angle":7.94,"dist":421.5,"hr":4,"rank":11},{"section":"BLEACHERS 193","angle":-18.85,"dist":416.8,"hr":4,"rank":11},{"section":"BOX 171","angle":-39.05,"dist":393.0,"hr":4,"rank":11},{"section":"CLUB 1","angle":40.08,"dist":382.5,"hr":4,"rank":11},{"section":"CLUB 703E","angle":-43.39,"dist":395.8,"hr":4,"rank":11},{"section":"BLEACHERS 103","angle":12.59,"dist":417.3,"hr":3,"rank":18},{"section":"BLEACHERS 191","angle":-24.09,"dist":409.0,"hr":3,"rank":18},{"section":"BLEACHERS 197","angle":-7.81,"dist":429.3,"hr":3,"rank":18},{"section":"BOX 170","angle":-44.38,"dist":380.7,"hr":3,"rank":18},{"section":"CARDINALS NATION ROOFTOP 2","angle":-30.8,"dist":419.0,"hr":3,"rank":18},{"section":"CLUB 703F","angle":-39.99,"dist":390.0,"hr":3,"rank":18},{"section":"DECK 2","angle":-9.36,"dist":407.0,"hr":3,"rank":18},{"section":"FREESES LANDING","angle":9.18,"dist":412.3,"hr":3,"rank":18},{"section":"BIG MAC LAND 272","angle":-40.29,"dist":392.5,"hr":2,"rank":26},{"section":"BLEACHERS 105","angle":17.8,"dist":421.0,"hr":2,"rank":26},{"section":"BLEACHERS 189","angle":-29.4,"dist":406.5,"hr":2,"rank":26},{"section":"BOX 127","angle":34.8,"dist":387.5,"hr":2,"rank":26},{"section":"BOX 129","angle":44.86,"dist":356.0,"hr":2,"rank":26},{"section":"DECK 1","angle":-6.77,"dist":414.0,"hr":2,"rank":26},{"section":"DECK GA","angle":-21.94,"dist":408.0,"hr":2,"rank":26},{"section":"BALCONY INSIDE","angle":-26.45,"dist":372.0,"hr":1,"rank":33},{"section":"BALCONY OUTSIDE","angle":-26.12,"dist":391.0,"hr":1,"rank":33},{"section":"BOX 130","angle":47.42,"dist":375.0,"hr":1,"rank":33},{"section":"CLUB 3","angle":45.11,"dist":410.0,"hr":1,"rank":33},{"section":"CLUB 703D","angle":-45.74,"dist":399.0,"hr":1,"rank":33},{"section":"LOGE 228","angle":42.68,"dist":360.0,"hr":1,"rank":33}]},"Chase Field":{"team":"Arizona Diamondbacks","wall":[{"angle":-45,"dist":330},{"angle":-20,"dist":374},{"angle":0,"dist":407},{"angle":20,"dist":374},{"angle":45,"dist":334}],"sections":[{"section":"140","angle":-35.67,"dist":400.9,"hr":14,"rank":1},{"section":"142","angle":-26.25,"dist":406.0,"hr":13,"rank":2},{"section":"103W","angle":31.46,"dist":393.2,"hr":11,"rank":3},{"section":"141W","angle":-31.46,"dist":393.1,"hr":10,"rank":4},{"section":"FIELD PATIO","angle":-21.12,"dist":421.2,"hr":10,"rank":4},{"section":"102","angle":25.88,"dist":395.1,"hr":9,"rank":6},{"section":"143","angle":-20.96,"dist":404.7,"hr":9,"rank":6},{"section":"142W","angle":-28.56,"dist":407.9,"hr":8,"rank":8},{"section":"101","angle":21.85,"dist":409.0,"hr":6,"rank":9},{"section":"102W","angle":28.56,"dist":394.7,"hr":6,"rank":9},{"section":"100BW","angle":22.53,"dist":404.8,"hr":5,"rank":11},{"section":"139","angle":-40.56,"dist":395.8,"hr":5,"rank":11},{"section":"139W","angle":-41.56,"dist":389.0,"hr":5,"rank":11},{"section":"LEFT 1","angle":-15.72,"dist":417.4,"hr":5,"rank":11},{"section":"104","angle":35.67,"dist":400.2,"hr":4,"rank":15},{"section":"105W","angle":41.56,"dist":421.0,"hr":4,"rank":15},{"section":"138","angle":-44.89,"dist":389.5,"hr":4,"rank":15},{"section":"141","angle":-30.65,"dist":394.2,"hr":4,"rank":15},{"section":"145AW","angle":-21.61,"dist":423.0,"hr":4,"rank":15},{"section":"HOME RUN PATIO","angle":24.02,"dist":407.2,"hr":4,"rank":15},{"section":"POOL","angle":16.9,"dist":402.5,"hr":4,"rank":15},{"section":"104W","angle":36.36,"dist":394.7,"hr":3,"rank":22},{"section":"105","angle":40.56,"dist":387.0,"hr":3,"rank":22},{"section":"ESTRELLA JALISCO CANTINA","angle":30.64,"dist":383.3,"hr":3,"rank":22},{"section":"LEFT 3","angle":-13.42,"dist":430.3,"hr":3,"rank":22},{"section":"RIGHT 6","angle":13.42,"dist":425.0,"hr":3,"rank":22},{"section":"STANDING ROOM ONLY","angle":-36.89,"dist":397.0,"hr":3,"rank":22},{"section":"106","angle":44.89,"dist":381.0,"hr":2,"rank":28},{"section":"COORS LIGHT STRIKE ZONE","angle":3.95,"dist":428.5,"hr":2,"rank":28},{"section":"LEFT 6","angle":-8.95,"dist":433.0,"hr":2,"rank":28},{"section":"LEFT 8","angle":-5.72,"dist":448.5,"hr":2,"rank":28},{"section":"RIGHT 7","angle":14.45,"dist":416.5,"hr":2,"rank":28},{"section":"RIGHT 8","angle":15.72,"dist":433.0,"hr":2,"rank":28},{"section":"140W","angle":-36.36,"dist":376.0,"hr":1,"rank":34},{"section":"145BW","angle":-10.82,"dist":443.0,"hr":1,"rank":34},{"section":"COLD BEERS AND CHEESEBURGERS TERRACE","angle":-31.13,"dist":380.0,"hr":1,"rank":34},{"section":"LEFT 2","angle":-14.45,"dist":412.0,"hr":1,"rank":34},{"section":"LEFT 4","angle":-12.12,"dist":417.0,"hr":1,"rank":34},{"section":"RIGHT 2","angle":7.34,"dist":427.0,"hr":1,"rank":34},{"section":"RIGHT 5","angle":12.12,"dist":443.0,"hr":1,"rank":34}]},"Citi Field":{"team":"New York Mets","wall":[{"angle":-45,"dist":335},{"angle":-20,"dist":358},{"angle":0,"dist":408},{"angle":20,"dist":375},{"angle":45,"dist":330}],"sections":[{"section":"143","angle":19.06,"dist":392.0,"hr":23,"rank":1},{"section":"CLUB AT PAYSONS","angle":29.69,"dist":397.0,"hr":12,"rank":2},{"section":"301","angle":34.26,"dist":378.4,"hr":11,"rank":3},{"section":"101","angle":29.89,"dist":385.8,"hr":9,"rank":4},{"section":"141","angle":10.48,"dist":405.5,"hr":8,"rank":5},{"section":"140","angle":6.47,"dist":418.1,"hr":7,"rank":6},{"section":"302","angle":38.6,"dist":382.3,"hr":7,"rank":6},{"section":"DECK F","angle":-6.43,"dist":419.3,"hr":7,"rank":6},{"section":"102","angle":36.26,"dist":368.5,"hr":6,"rank":9},{"section":"142","angle":14.8,"dist":394.5,"hr":6,"rank":9},{"section":"303","angle":43.71,"dist":370.2,"hr":6,"rank":9},{"section":"137","angle":-17.95,"dist":405.6,"hr":5,"rank":12},{"section":"DECK A","angle":-20.22,"dist":387.4,"hr":5,"rank":12},{"section":"SRO","angle":14.31,"dist":403.4,"hr":5,"rank":12},{"section":"338L","angle":-15.24,"dist":404.0,"hr":4,"rank":15},{"section":"533","angle":-40.33,"dist":372.0,"hr":4,"rank":15},{"section":"535","angle":-31.42,"dist":383.2,"hr":4,"rank":15},{"section":"536","angle":-27.11,"dist":386.2,"hr":4,"rank":15},{"section":"DECK C","angle":-13.15,"dist":398.8,"hr":4,"rank":15},{"section":"103","angle":42.25,"dist":383.0,"hr":3,"rank":20},{"section":"105","angle":47.45,"dist":356.0,"hr":3,"rank":20},{"section":"335","angle":-29.82,"dist":369.7,"hr":3,"rank":20},{"section":"338","angle":-14.61,"dist":388.0,"hr":3,"rank":20},{"section":"431","angle":-43.01,"dist":375.3,"hr":3,"rank":20},{"section":"432","angle":-38.16,"dist":380.3,"hr":3,"rank":20},{"section":"436","angle":-19.25,"dist":392.3,"hr":3,"rank":20},{"section":"METROPOLITAN MARKET","angle":-37.41,"dist":368.7,"hr":3,"rank":20},{"section":"134","angle":-35.46,"dist":376.0,"hr":2,"rank":28},{"section":"135","angle":-29.52,"dist":403.0,"hr":2,"rank":28},{"section":"138","angle":-12.4,"dist":420.0,"hr":2,"rank":28},{"section":"139","angle":-8.24,"dist":413.5,"hr":2,"rank":28},{"section":"433","angle":-33.58,"dist":412.5,"hr":2,"rank":28},{"section":"435","angle":-24.35,"dist":395.5,"hr":2,"rank":28},{"section":"DECK B","angle":-16.51,"dist":407.5,"hr":2,"rank":28},{"section":"DECK D","angle":-10.93,"dist":409.5,"hr":2,"rank":28},{"section":"132","angle":-40.86,"dist":365.0,"hr":1,"rank":36},{"section":"133","angle":-41.09,"dist":376.0,"hr":1,"rank":36},{"section":"136","angle":-23.32,"dist":408.0,"hr":1,"rank":36},{"section":"334","angle":-33.7,"dist":372.0,"hr":1,"rank":36},{"section":"336","angle":-24.87,"dist":389.0,"hr":1,"rank":36},{"section":"337L","angle":-20.05,"dist":380.0,"hr":1,"rank":36},{"section":"339","angle":-9.39,"dist":440.0,"hr":1,"rank":36},{"section":"434","angle":-29.02,"dist":409.0,"hr":1,"rank":36},{"section":"437","angle":-15.81,"dist":427.0,"hr":1,"rank":36},{"section":"532","angle":-44.31,"dist":350.0,"hr":1,"rank":36},{"section":"534","angle":-36.2,"dist":375.0,"hr":1,"rank":36},{"section":"537","angle":-22.72,"dist":373.0,"hr":1,"rank":36},{"section":"538","angle":-19.61,"dist":374.0,"hr":1,"rank":36},{"section":"DECK SRO","angle":-8.59,"dist":404.0,"hr":1,"rank":36}]},"Citizens Bank Park":{"team":"Philadelphia Phillies","wall":[{"angle":-45,"dist":329},{"angle":-20,"dist":374},{"angle":0,"dist":401},{"angle":20,"dist":369},{"angle":45,"dist":330}],"sections":[{"section":"GA SRO","angle":8.86,"dist":407.5,"hr":21,"rank":1},{"section":"201","angle":21.87,"dist":409.1,"hr":15,"rank":2},{"section":"148","angle":-9.22,"dist":414.9,"hr":14,"rank":3},{"section":"243","angle":-31.04,"dist":389.4,"hr":11,"rank":4},{"section":"101","angle":13.8,"dist":415.1,"hr":9,"rank":5},{"section":"102","angle":18.88,"dist":397.7,"hr":9,"rank":5},{"section":"301","angle":25.35,"dist":382.4,"hr":9,"rank":5},{"section":"103","angle":23.95,"dist":403.0,"hr":8,"rank":8},{"section":"143","angle":-31.82,"dist":386.1,"hr":8,"rank":8},{"section":"244","angle":-26.41,"dist":390.6,"hr":8,"rank":8},{"section":"144","angle":-26.63,"dist":386.1,"hr":7,"rank":11},{"section":"145","angle":-21.87,"dist":393.7,"hr":7,"rank":11},{"section":"146","angle":-17.88,"dist":405.8,"hr":6,"rank":13},{"section":"203","angle":33.39,"dist":387.8,"hr":6,"rank":13},{"section":"241","angle":-41.06,"dist":375.8,"hr":6,"rank":13},{"section":"245","angle":-23.17,"dist":412.8,"hr":6,"rank":13},{"section":"303V","angle":39.23,"dist":375.8,"hr":6,"rank":13},{"section":"104","angle":29.87,"dist":388.4,"hr":5,"rank":18},{"section":"141","angle":-42.21,"dist":373.4,"hr":5,"rank":18},{"section":"242","angle":-36.32,"dist":368.2,"hr":5,"rank":18},{"section":"302","angle":30.93,"dist":396.0,"hr":5,"rank":18},{"section":"302V","angle":33.72,"dist":414.8,"hr":5,"rank":18},{"section":"303","angle":36.04,"dist":376.0,"hr":5,"rank":18},{"section":"BLEACHERS","angle":11.69,"dist":420.2,"hr":5,"rank":18},{"section":"105","angle":35.71,"dist":379.7,"hr":3,"rank":25},{"section":"106","angle":41.54,"dist":377.0,"hr":3,"rank":25},{"section":"202","angle":27.26,"dist":370.3,"hr":3,"rank":25},{"section":"304V","angle":45.16,"dist":365.7,"hr":3,"rank":25},{"section":"BLEACHERS WC","angle":17.56,"dist":428.7,"hr":3,"rank":25},{"section":"DECK 142","angle":-38.4,"dist":384.3,"hr":3,"rank":25},{"section":"140","angle":-48.05,"dist":374.5,"hr":2,"rank":31},{"section":"204","angle":39.73,"dist":391.0,"hr":2,"rank":31},{"section":"205","angle":46.23,"dist":361.5,"hr":2,"rank":31},{"section":"142","angle":-37.68,"dist":391.0,"hr":1,"rank":34},{"section":"147","angle":-13.11,"dist":417.0,"hr":1,"rank":34}]},"Comerica Park":{"team":"Detroit Tigers","wall":[{"angle":-45,"dist":342},{"angle":-20,"dist":370},{"angle":0,"dist":412},{"angle":20,"dist":365},{"angle":45,"dist":330}],"sections":[{"section":"149","angle":-27.74,"dist":393.2,"hr":29,"rank":1},{"section":"150","angle":-22.56,"dist":392.8,"hr":25,"rank":2},{"section":"102","angle":20.23,"dist":404.3,"hr":18,"rank":3},{"section":"148","angle":-33.4,"dist":389.4,"hr":18,"rank":3},{"section":"104","angle":28.61,"dist":387.7,"hr":16,"rank":5},{"section":"147","angle":-39.06,"dist":381.7,"hr":15,"rank":6},{"section":"151","angle":-17.44,"dist":414.1,"hr":15,"rank":6},{"section":"106","angle":38.89,"dist":383.3,"hr":13,"rank":8},{"section":"BALCONY 2","angle":31.85,"dist":394.2,"hr":12,"rank":9},{"section":"103","angle":24.19,"dist":389.4,"hr":11,"rank":10},{"section":"105","angle":34.42,"dist":389.8,"hr":8,"rank":11},{"section":"BALCONY 3","angle":35.08,"dist":387.7,"hr":6,"rank":12},{"section":"101","angle":13.99,"dist":425.8,"hr":5,"rank":13},{"section":"SRO","angle":40.91,"dist":398.0,"hr":5,"rank":13},{"section":"146","angle":-43.64,"dist":359.0,"hr":4,"rank":15},{"section":"BALCONY 1","angle":28.71,"dist":382.0,"hr":2,"rank":16},{"section":"BALCONY 4","angle":46.54,"dist":349.0,"hr":2,"rank":16},{"section":"107","angle":44.85,"dist":374.0,"hr":1,"rank":18},{"section":"110","angle":45.06,"dist":373.0,"hr":1,"rank":18},{"section":"BALCONY TABLES","angle":40.55,"dist":351.0,"hr":1,"rank":18}]},"Coors Field":{"team":"Colorado Rockies","wall":[{"angle":-45,"dist":347},{"angle":-20,"dist":390},{"angle":0,"dist":415},{"angle":20,"dist":375},{"angle":45,"dist":350}],"sections":[{"section":"151","angle":-40.53,"dist":391.6,"hr":18,"rank":1},{"section":"153W","angle":-33.4,"dist":396.3,"hr":13,"rank":2},{"section":"403","angle":0.49,"dist":436.1,"hr":10,"rank":3},{"section":"153","angle":-32.27,"dist":401.7,"hr":9,"rank":4},{"section":"LOWER 304","angle":25.5,"dist":425.1,"hr":9,"rank":4},{"section":"155","angle":-24.09,"dist":416.5,"hr":8,"rank":6},{"section":"155W","angle":-25.55,"dist":419.0,"hr":7,"rank":7},{"section":"156W","angle":-21.88,"dist":414.9,"hr":7,"rank":7},{"section":"201","angle":9.33,"dist":450.6,"hr":7,"rank":7},{"section":"SUITE 60B","angle":35.38,"dist":416.6,"hr":7,"rank":7},{"section":"158","angle":-14.53,"dist":453.7,"hr":6,"rank":11},{"section":"204","angle":23.43,"dist":413.5,"hr":6,"rank":11},{"section":"107","angle":37.06,"dist":400.2,"hr":5,"rank":13},{"section":"154W","angle":-29.45,"dist":400.8,"hr":5,"rank":13},{"section":"160","angle":-7.18,"dist":437.2,"hr":5,"rank":13},{"section":"LOWER 303","angle":20.76,"dist":408.2,"hr":5,"rank":13},{"section":"150","angle":-47.54,"dist":377.5,"hr":4,"rank":17},{"section":"157W","angle":-18.45,"dist":424.5,"hr":4,"rank":17},{"section":"DECK 203","angle":18.59,"dist":406.8,"hr":4,"rank":17},{"section":"105","angle":28.64,"dist":431.7,"hr":3,"rank":20},{"section":"154","angle":-27.91,"dist":418.7,"hr":3,"rank":20},{"section":"157","angle":-17.54,"dist":432.7,"hr":3,"rank":20},{"section":"208","angle":45.33,"dist":395.3,"hr":3,"rank":20},{"section":"402","angle":-4.37,"dist":440.7,"hr":3,"rank":20},{"section":"DECK 202","angle":13.96,"dist":431.3,"hr":3,"rank":20},{"section":"LOWER 301","angle":13.52,"dist":429.7,"hr":3,"rank":20},{"section":"LOWER 302","angle":16.59,"dist":415.0,"hr":3,"rank":20},{"section":"SUITE 60A","angle":31.89,"dist":416.3,"hr":3,"rank":20},{"section":"SUITE 61A","angle":39.02,"dist":403.7,"hr":3,"rank":20},{"section":"SUITE 61B","angle":42.57,"dist":408.0,"hr":3,"rank":20},{"section":"W 151","angle":-36.65,"dist":393.7,"hr":3,"rank":20},{"section":"106W","angle":32.46,"dist":419.0,"hr":2,"rank":32},{"section":"108W","angle":41.68,"dist":416.5,"hr":2,"rank":32},{"section":"152","angle":-36.8,"dist":429.5,"hr":2,"rank":32},{"section":"158W","angle":-14.64,"dist":442.0,"hr":2,"rank":32},{"section":"159","angle":-10.97,"dist":427.5,"hr":2,"rank":32},{"section":"202","angle":13.03,"dist":458.5,"hr":2,"rank":32},{"section":"203","angle":17.69,"dist":451.0,"hr":2,"rank":32},{"section":"205W","angle":30.72,"dist":386.5,"hr":2,"rank":32},{"section":"207","angle":39.92,"dist":387.5,"hr":2,"rank":32},{"section":"GA ROOFTOP","angle":16.75,"dist":412.5,"hr":2,"rank":32},{"section":"LOWER 305","angle":30.12,"dist":411.5,"hr":2,"rank":32},{"section":"LOWER 307","angle":39.9,"dist":404.0,"hr":2,"rank":32},{"section":"W 402","angle":-5.23,"dist":439.5,"hr":2,"rank":32},{"section":"105W","angle":29.09,"dist":436.0,"hr":1,"rank":45},{"section":"156","angle":-19.98,"dist":443.0,"hr":1,"rank":45},{"section":"205","angle":29.15,"dist":388.0,"hr":1,"rank":45},{"section":"206","angle":34.28,"dist":388.0,"hr":1,"rank":45},{"section":"DECK 201","angle":10.4,"dist":444.0,"hr":1,"rank":45},{"section":"W 153","angle":-28.2,"dist":411.0,"hr":1,"rank":45},{"section":"W 155","angle":-19.81,"dist":411.0,"hr":1,"rank":45}]},"Daikin Park":{"team":"Houston Astros","wall":[{"angle":-45,"dist":315},{"angle":-20,"dist":362},{"angle":0,"dist":409},{"angle":20,"dist":373},{"angle":45,"dist":326}],"sections":[{"section":"102","angle":-33.66,"dist":368.6,"hr":36,"rank":1},{"section":"100","angle":-24.08,"dist":383.7,"hr":29,"rank":2},{"section":"101","angle":-28.15,"dist":377.3,"hr":27,"rank":3},{"section":"103","angle":-40.57,"dist":374.3,"hr":25,"rank":4},{"section":"BOX","angle":1.39,"dist":419.1,"hr":11,"rank":5},{"section":"153","angle":34.65,"dist":374.9,"hr":10,"rank":6},{"section":"104","angle":-46.83,"dist":358.6,"hr":8,"rank":7},{"section":"251","angle":44.11,"dist":350.9,"hr":7,"rank":8},{"section":"252","angle":38.72,"dist":371.9,"hr":7,"rank":8},{"section":"253","angle":32.5,"dist":372.3,"hr":6,"rank":10},{"section":"255","angle":21.74,"dist":393.8,"hr":6,"rank":10},{"section":"152","angle":39.56,"dist":384.6,"hr":5,"rank":12},{"section":"154","angle":27.41,"dist":375.4,"hr":5,"rank":12},{"section":"156","angle":17.62,"dist":403.2,"hr":4,"rank":14},{"section":"254","angle":26.72,"dist":386.0,"hr":3,"rank":15},{"section":"155","angle":22.77,"dist":383.0,"hr":2,"rank":16},{"section":"150","angle":48.14,"dist":369.0,"hr":1,"rank":17},{"section":"151","angle":44.86,"dist":338.0,"hr":1,"rank":17},{"section":"CLUB","angle":10.42,"dist":428.0,"hr":1,"rank":17},{"section":"DECK","angle":15.12,"dist":443.0,"hr":1,"rank":17}]},"Fenway Park":{"team":"Boston Red Sox","wall":[{"angle":-45,"dist":310},{"angle":-20,"dist":379},{"angle":0,"dist":390},{"angle":20,"dist":380},{"angle":45,"dist":302}],"sections":[{"section":"GREEN MONSTER 4","angle":-30.1,"dist":393.1,"hr":13,"rank":1},{"section":"GREEN MONSTER 2","angle":-39.8,"dist":371.1,"hr":11,"rank":2},{"section":"GREEN MONSTER 3","angle":-33.47,"dist":386.8,"hr":10,"rank":3},{"section":"GREEN MONSTER 5","angle":-26.83,"dist":388.5,"hr":10,"rank":3},{"section":"GREEN MONSTER 6","angle":-23.18,"dist":398.9,"hr":10,"rank":3},{"section":"BLEACHER 38","angle":13.83,"dist":392.6,"hr":9,"rank":6},{"section":"BLEACHER 34","angle":-3.65,"dist":420.1,"hr":8,"rank":7},{"section":"BLEACHER 35","angle":0.81,"dist":418.6,"hr":8,"rank":7},{"section":"GREEN MONSTER 7","angle":-19.83,"dist":389.2,"hr":8,"rank":7},{"section":"BLEACHER 40","angle":16.2,"dist":414.7,"hr":6,"rank":10},{"section":"BLEACHER 39","angle":17.91,"dist":405.8,"hr":5,"rank":11},{"section":"BLEACHER 42","angle":26.55,"dist":402.6,"hr":5,"rank":11},{"section":"GREEN MONSTER 8","angle":-16.73,"dist":399.2,"hr":5,"rank":11},{"section":"GREEN MONSTER SRO","angle":-11.84,"dist":430.4,"hr":5,"rank":11},{"section":"DECK TABLE 210","angle":45.45,"dist":321.2,"hr":4,"rank":15},{"section":"BLEACHER 41","angle":22.1,"dist":396.0,"hr":3,"rank":16},{"section":"BOX 2","angle":39.09,"dist":396.3,"hr":3,"rank":16},{"section":"DECK TABLE 207","angle":41.88,"dist":386.7,"hr":3,"rank":16},{"section":"GREEN MONSTER 1","angle":-43.77,"dist":382.3,"hr":3,"rank":16},{"section":"TRULY TERRACE SRO","angle":25.27,"dist":400.7,"hr":3,"rank":16},{"section":"BOX 4","angle":43.81,"dist":394.5,"hr":2,"rank":21},{"section":"BOX 89","angle":40.12,"dist":398.0,"hr":2,"rank":21},{"section":"DECK TABLE 208","angle":43.31,"dist":365.0,"hr":2,"rank":21},{"section":"GREEN MONSTER 10","angle":-9.35,"dist":447.0,"hr":2,"rank":21},{"section":"GREEN MONSTER 9","angle":-14.04,"dist":431.0,"hr":2,"rank":21},{"section":"THE 502 PERCH","angle":30.04,"dist":387.5,"hr":2,"rank":21},{"section":"BLEACHER 36","angle":5.09,"dist":427.0,"hr":1,"rank":27},{"section":"BLEACHER 43","angle":30.25,"dist":387.0,"hr":1,"rank":27},{"section":"BOX 6","angle":46.57,"dist":334.0,"hr":1,"rank":27},{"section":"BOX 87","angle":34.32,"dist":377.0,"hr":1,"rank":27},{"section":"DECK BARSTOOLS A","angle":39.88,"dist":418.0,"hr":1,"rank":27},{"section":"DECK TABLE 105","angle":38.27,"dist":382.0,"hr":1,"rank":27},{"section":"DECK TABLE 108","angle":41.71,"dist":399.0,"hr":1,"rank":27},{"section":"DECK TABLE 109","angle":43.03,"dist":357.0,"hr":1,"rank":27},{"section":"DECK TABLE 110","angle":44.09,"dist":386.0,"hr":1,"rank":27},{"section":"DECK TABLE 112","angle":46.16,"dist":337.0,"hr":1,"rank":27},{"section":"DECK TABLE 205","angle":39.17,"dist":388.0,"hr":1,"rank":27},{"section":"DECK TABLE 301","angle":33.28,"dist":392.0,"hr":1,"rank":27},{"section":"GRANDSTAND 2","angle":36.81,"dist":420.0,"hr":1,"rank":27},{"section":"GRANDSTAND 3","angle":40.9,"dist":394.0,"hr":1,"rank":27}]},"Globe Life Field":{"team":"Texas Rangers","wall":[{"angle":-45,"dist":329},{"angle":-20,"dist":372},{"angle":0,"dist":407},{"angle":20,"dist":374},{"angle":45,"dist":326}],"sections":[{"section":"243","angle":-32.02,"dist":399.0,"hr":14,"rank":1},{"section":"242","angle":-24.61,"dist":401.8,"hr":12,"rank":2},{"section":"237","angle":18.84,"dist":399.9,"hr":11,"rank":3},{"section":"235","angle":28.84,"dist":381.2,"hr":8,"rank":4},{"section":"241","angle":-17.89,"dist":399.0,"hr":8,"rank":4},{"section":"244","angle":-38.85,"dist":379.8,"hr":8,"rank":4},{"section":"234","angle":33.69,"dist":384.9,"hr":7,"rank":7},{"section":"134","angle":7.87,"dist":429.2,"hr":6,"rank":8},{"section":"128","angle":42.52,"dist":378.8,"hr":5,"rank":9},{"section":"129","angle":37.87,"dist":390.4,"hr":5,"rank":9},{"section":"138","angle":-22.71,"dist":396.0,"hr":5,"rank":9},{"section":"232","angle":44.24,"dist":378.6,"hr":5,"rank":9},{"section":"240","angle":-10.6,"dist":421.0,"hr":5,"rank":9},{"section":"GA SRO","angle":-6.8,"dist":425.6,"hr":5,"rank":9},{"section":"131","angle":26.89,"dist":412.8,"hr":4,"rank":15},{"section":"132","angle":21.15,"dist":419.0,"hr":4,"rank":15},{"section":"133","angle":14.93,"dist":409.8,"hr":4,"rank":15},{"section":"233","angle":38.71,"dist":369.8,"hr":4,"rank":15},{"section":"137","angle":-17.01,"dist":409.0,"hr":3,"rank":19},{"section":"139","angle":-28.97,"dist":396.7,"hr":3,"rank":19},{"section":"30","angle":-28.26,"dist":408.0,"hr":3,"rank":19},{"section":"31","angle":-35.07,"dist":391.3,"hr":3,"rank":19},{"section":"33","angle":-43.99,"dist":366.3,"hr":3,"rank":19},{"section":"130","angle":32.57,"dist":389.0,"hr":2,"rank":24},{"section":"238","angle":3.06,"dist":440.5,"hr":2,"rank":24},{"section":"28","angle":-15.8,"dist":424.0,"hr":2,"rank":24},{"section":"101","angle":-48.39,"dist":364.0,"hr":1,"rank":27},{"section":"127","angle":47.64,"dist":359.0,"hr":1,"rank":27},{"section":"135","angle":-5.45,"dist":431.0,"hr":1,"rank":27},{"section":"239","angle":-1.37,"dist":427.0,"hr":1,"rank":27},{"section":"27","angle":-9.79,"dist":411.0,"hr":1,"rank":27},{"section":"32","angle":-40.58,"dist":408.0,"hr":1,"rank":27}]},"Great American Ball Park":{"team":"Cincinnati Reds","wall":[{"angle":-45,"dist":328},{"angle":-20,"dist":379},{"angle":0,"dist":404},{"angle":20,"dist":370},{"angle":45,"dist":325}],"sections":[{"section":"140","angle":38.66,"dist":371.4,"hr":19,"rank":1},{"section":"142","angle":27.86,"dist":382.6,"hr":16,"rank":2},{"section":"104","angle":-31.91,"dist":382.5,"hr":15,"rank":3},{"section":"103WC","angle":-27.84,"dist":391.4,"hr":13,"rank":4},{"section":"143","angle":22.26,"dist":396.8,"hr":12,"rank":5},{"section":"101WC","angle":-17.08,"dist":408.5,"hr":11,"rank":6},{"section":"105WC","angle":-39.22,"dist":381.5,"hr":10,"rank":7},{"section":"141","angle":33.55,"dist":396.3,"hr":10,"rank":7},{"section":"146","angle":6.7,"dist":416.9,"hr":10,"rank":7},{"section":"404","angle":-34.47,"dist":375.2,"hr":10,"rank":7},{"section":"144","angle":16.72,"dist":396.2,"hr":6,"rank":11},{"section":"BUDWEISER BULLPEN DECKS","angle":42.46,"dist":380.3,"hr":6,"rank":11},{"section":"105","angle":-38.65,"dist":386.8,"hr":5,"rank":13},{"section":"145WC","angle":10.46,"dist":402.8,"hr":5,"rank":13},{"section":"DECK","angle":-8.12,"dist":421.2,"hr":5,"rank":13},{"section":"LAURAS LEAN BULLPEN DECKS","angle":-11.85,"dist":411.2,"hr":5,"rank":13},{"section":"103","angle":-25.91,"dist":397.5,"hr":4,"rank":17},{"section":"102WC","angle":-22.11,"dist":393.3,"hr":3,"rank":18},{"section":"403","angle":-29.19,"dist":377.7,"hr":3,"rank":18},{"section":"106","angle":-44.3,"dist":370.0,"hr":2,"rank":20},{"section":"139","angle":46.88,"dist":346.0,"hr":2,"rank":20},{"section":"145","angle":9.85,"dist":422.0,"hr":2,"rank":20},{"section":"401","angle":-20.45,"dist":398.5,"hr":2,"rank":20},{"section":"405WC","angle":-39.58,"dist":370.0,"hr":2,"rank":20},{"section":"BALCONY","angle":44.43,"dist":363.5,"hr":2,"rank":20},{"section":"101","angle":-16.15,"dist":444.0,"hr":1,"rank":26},{"section":"102","angle":-20.32,"dist":397.0,"hr":1,"rank":26},{"section":"146WC","angle":7.1,"dist":401.0,"hr":1,"rank":26},{"section":"401WC","angle":-19.45,"dist":399.0,"hr":1,"rank":26},{"section":"402WC","angle":-23.05,"dist":406.0,"hr":1,"rank":26},{"section":"405","angle":-39.86,"dist":417.0,"hr":1,"rank":26},{"section":"406","angle":-44.16,"dist":388.0,"hr":1,"rank":26},{"section":"CENTERFIELD PORCH","angle":10.15,"dist":425.0,"hr":1,"rank":26},{"section":"POWER ALLEY PATIO","angle":-16.09,"dist":395.0,"hr":1,"rank":26}]},"Kauffman Stadium":{"team":"Kansas City Royals","wall":[{"angle":-45,"dist":330},{"angle":-20,"dist":387},{"angle":0,"dist":410},{"angle":20,"dist":387},{"angle":45,"dist":330}],"sections":[{"section":"DECK","angle":16.31,"dist":419.8,"hr":29,"rank":1},{"section":"DECK SRO","angle":9.32,"dist":430.1,"hr":14,"rank":2},{"section":"103","angle":-24.25,"dist":412.2,"hr":12,"rank":3},{"section":"101","angle":-9.53,"dist":431.6,"hr":10,"rank":4},{"section":"152","angle":30.7,"dist":404.1,"hr":10,"rank":4},{"section":"201","angle":-14.38,"dist":422.1,"hr":10,"rank":4},{"section":"104","angle":-30.51,"dist":403.8,"hr":6,"rank":7},{"section":"SUITE 4","angle":-39.73,"dist":399.3,"hr":6,"rank":7},{"section":"250","angle":41.37,"dist":391.4,"hr":5,"rank":9},{"section":"203","angle":-24.73,"dist":413.2,"hr":4,"rank":10},{"section":"PRICE CHOPPER PATIO","angle":25.03,"dist":417.2,"hr":4,"rank":10},{"section":"107","angle":-43.68,"dist":370.0,"hr":3,"rank":12},{"section":"148","angle":43.68,"dist":394.3,"hr":3,"rank":12},{"section":"202","angle":-20.98,"dist":431.7,"hr":3,"rank":12},{"section":"252","angle":32.49,"dist":387.0,"hr":3,"rank":12},{"section":"SUITE 1","angle":-31.79,"dist":413.0,"hr":3,"rank":12},{"section":"SUITE 5","angle":-42.03,"dist":389.0,"hr":3,"rank":12},{"section":"102","angle":-15.73,"dist":443.0,"hr":2,"rank":18},{"section":"150","angle":40.35,"dist":379.0,"hr":2,"rank":18},{"section":"151","angle":36.11,"dist":405.0,"hr":2,"rank":18},{"section":"206","angle":-45.82,"dist":368.5,"hr":2,"rank":18},{"section":"BLUEMOON TAPROOM","angle":36.72,"dist":408.5,"hr":2,"rank":18},{"section":"RIVALS","angle":39.44,"dist":407.5,"hr":2,"rank":18},{"section":"SUITE 3","angle":-37.1,"dist":386.5,"hr":2,"rank":18},{"section":"SUITES","angle":-33.44,"dist":401.5,"hr":2,"rank":18},{"section":"105","angle":-36.11,"dist":408.0,"hr":1,"rank":26},{"section":"108","angle":-47.54,"dist":384.0,"hr":1,"rank":26},{"section":"251","angle":37.05,"dist":405.0,"hr":1,"rank":26},{"section":"MILLER LITE RAIL SEATS","angle":-24.01,"dist":399.0,"hr":1,"rank":26},{"section":"SUITE 2","angle":-34.38,"dist":359.0,"hr":1,"rank":26}]},"Nationals Park":{"team":"Washington Nationals","wall":[{"angle":-45,"dist":336},{"angle":-20,"dist":377},{"angle":0,"dist":402},{"angle":20,"dist":370},{"angle":45,"dist":335}],"sections":[{"section":"101","angle":-21.39,"dist":395.1,"hr":13,"rank":1},{"section":"238","angle":37.56,"dist":383.3,"hr":13,"rank":1},{"section":"105","angle":-40.04,"dist":373.6,"hr":10,"rank":3},{"section":"242","angle":15.95,"dist":403.6,"hr":10,"rank":3},{"section":"103","angle":-31.38,"dist":404.1,"hr":9,"rank":5},{"section":"104","angle":-35.29,"dist":382.3,"hr":9,"rank":5},{"section":"139","angle":33.63,"dist":385.0,"hr":9,"rank":5},{"section":"100P","angle":-10.13,"dist":406.2,"hr":8,"rank":8},{"section":"241","angle":21.62,"dist":405.4,"hr":8,"rank":8},{"section":"GA SRO","angle":0.57,"dist":417.9,"hr":8,"rank":8},{"section":"102","angle":-26.75,"dist":403.6,"hr":7,"rank":11},{"section":"106","angle":-44.17,"dist":369.1,"hr":7,"rank":11},{"section":"138","angle":41.01,"dist":371.7,"hr":7,"rank":11},{"section":"141","angle":20.33,"dist":405.6,"hr":7,"rank":11},{"section":"142","angle":13.85,"dist":414.6,"hr":7,"rank":11},{"section":"239","angle":32.19,"dist":412.6,"hr":7,"rank":11},{"section":"100","angle":-10.01,"dist":406.3,"hr":6,"rank":17},{"section":"143","angle":8.99,"dist":406.7,"hr":6,"rank":17},{"section":"236","angle":44.7,"dist":376.5,"hr":6,"rank":17},{"section":"237","angle":43.64,"dist":379.2,"hr":4,"rank":20},{"section":"240","angle":27.27,"dist":414.2,"hr":4,"rank":20},{"section":"LOFT","angle":-15.49,"dist":397.5,"hr":4,"rank":20},{"section":"243","angle":11.82,"dist":411.3,"hr":3,"rank":23},{"section":"SWING BIG BEER PEN","angle":6.05,"dist":431.0,"hr":2,"rank":24},{"section":"100K","angle":-13.21,"dist":391.0,"hr":1,"rank":25},{"section":"137","angle":47.67,"dist":391.0,"hr":1,"rank":25},{"section":"140","angle":27.35,"dist":384.0,"hr":1,"rank":25}]},"Oracle Park":{"team":"San Francisco Giants","wall":[{"angle":-45,"dist":339},{"angle":-20,"dist":364},{"angle":0,"dist":399},{"angle":20,"dist":415},{"angle":45,"dist":309}],"sections":[{"section":"BLEACHERS 139","angle":-24.22,"dist":393.0,"hr":26,"rank":1},{"section":"BLEACHERS 140","angle":-18.35,"dist":403.4,"hr":18,"rank":2},{"section":"BLEACHERS 142","angle":-6.87,"dist":418.0,"hr":17,"rank":3},{"section":"BLEACHERS 138","angle":-29.83,"dist":387.1,"hr":15,"rank":4},{"section":"ARCADE 149","angle":42.85,"dist":367.1,"hr":12,"rank":5},{"section":"ARCADE 148","angle":36.14,"dist":380.2,"hr":11,"rank":6},{"section":"BLEACHERS 143","angle":7.29,"dist":411.7,"hr":11,"rank":6},{"section":"BLEACHERS 137","angle":-35.51,"dist":370.5,"hr":8,"rank":8},{"section":"BLEACHERS 141","angle":-13.63,"dist":409.7,"hr":6,"rank":9},{"section":"RESERVED 336","angle":-45.03,"dist":379.0,"hr":6,"rank":9},{"section":"BLEACHERS 136","angle":-40.12,"dist":383.5,"hr":4,"rank":11},{"section":"BLEACHERS 144","angle":11.46,"dist":420.8,"hr":4,"rank":11},{"section":"BLEACHERS 145","angle":13.4,"dist":418.3,"hr":3,"rank":13},{"section":"ARCADE 147","angle":27.86,"dist":395.0,"hr":2,"rank":14},{"section":"SRO","angle":26.77,"dist":403.5,"hr":2,"rank":14},{"section":"ARCADE 145","angle":21.34,"dist":414.0,"hr":1,"rank":16},{"section":"ARCADE 146","angle":24.61,"dist":399.0,"hr":1,"rank":16},{"section":"BOX 336","angle":-45.51,"dist":402.0,"hr":1,"rank":16},{"section":"PLAZA","angle":-10.26,"dist":430.0,"hr":1,"rank":16}]},"Oriole Park at Camden Yards":{"team":"Baltimore Orioles","wall":[{"angle":-45,"dist":333},{"angle":-20,"dist":364},{"angle":0,"dist":400},{"angle":20,"dist":373},{"angle":45,"dist":318}],"sections":[{"section":"SRO","angle":21.55,"dist":387.9,"hr":44,"rank":1},{"section":"98","angle":26.74,"dist":393.7,"hr":33,"rank":2},{"section":"90","angle":6.17,"dist":413.3,"hr":20,"rank":3},{"section":"92","angle":10.2,"dist":404.1,"hr":15,"rank":4},{"section":"96","angle":21.59,"dist":400.1,"hr":15,"rank":4},{"section":"86","angle":-18.22,"dist":397.7,"hr":13,"rank":6},{"section":"83","angle":-31.38,"dist":402.2,"hr":10,"rank":7},{"section":"4","angle":47.6,"dist":373.3,"hr":9,"rank":8},{"section":"85","angle":-25.98,"dist":404.0,"hr":8,"rank":9},{"section":"94","angle":15.81,"dist":408.8,"hr":8,"rank":9},{"section":"DECK","angle":-4.55,"dist":422.6,"hr":7,"rank":11},{"section":"388","angle":-23.45,"dist":404.5,"hr":6,"rank":12},{"section":"87","angle":-20.5,"dist":389.3,"hr":6,"rank":12},{"section":"278","angle":-43.65,"dist":397.0,"hr":5,"rank":14},{"section":"288","angle":-22.0,"dist":388.0,"hr":5,"rank":14},{"section":"80","angle":-32.42,"dist":395.8,"hr":5,"rank":14},{"section":"386","angle":-27.85,"dist":398.0,"hr":4,"rank":17},{"section":"284","angle":-32.3,"dist":394.5,"hr":2,"rank":18},{"section":"382","angle":-37.1,"dist":393.0,"hr":2,"rank":18},{"section":"74","angle":-45.73,"dist":373.5,"hr":2,"rank":18},{"section":"76","angle":-41.09,"dist":367.0,"hr":2,"rank":18},{"section":"78","angle":-36.84,"dist":392.5,"hr":2,"rank":18},{"section":"84","angle":-22.36,"dist":386.0,"hr":2,"rank":18},{"section":"280","angle":-40.45,"dist":390.0,"hr":1,"rank":24},{"section":"286","angle":-27.1,"dist":394.0,"hr":1,"rank":24},{"section":"79","angle":-42.23,"dist":412.0,"hr":1,"rank":24}]},"PNC Park":{"team":"Pittsburgh Pirates","wall":[{"angle":-45,"dist":325},{"angle":-20,"dist":389},{"angle":0,"dist":399},{"angle":20,"dist":375},{"angle":45,"dist":320}],"sections":[{"section":"GA STANDING","angle":-16.17,"dist":401.9,"hr":14,"rank":1},{"section":"144","angle":38.01,"dist":384.6,"hr":12,"rank":2},{"section":"139","angle":8.75,"dist":421.7,"hr":9,"rank":3},{"section":"133","angle":-43.28,"dist":381.6,"hr":8,"rank":4},{"section":"141","angle":19.24,"dist":409.9,"hr":8,"rank":4},{"section":"142","angle":26.83,"dist":409.2,"hr":8,"rank":4},{"section":"145","angle":44.45,"dist":373.9,"hr":7,"rank":7},{"section":"134","angle":-39.06,"dist":387.4,"hr":5,"rank":8},{"section":"134WC","angle":-40.12,"dist":382.4,"hr":5,"rank":8},{"section":"143","angle":32.2,"dist":385.4,"hr":5,"rank":8},{"section":"135","angle":-34.58,"dist":395.8,"hr":4,"rank":11},{"section":"136","angle":-28.96,"dist":401.0,"hr":4,"rank":11},{"section":"140","angle":14.15,"dist":403.5,"hr":4,"rank":11},{"section":"THE PORCH","angle":-17.09,"dist":415.2,"hr":4,"rank":11},{"section":"137","angle":-23.01,"dist":429.3,"hr":3,"rank":15},{"section":"238","angle":-19.9,"dist":410.7,"hr":3,"rank":15},{"section":"336","angle":-32.5,"dist":400.0,"hr":3,"rank":15},{"section":"237","angle":-24.99,"dist":422.0,"hr":2,"rank":18},{"section":"335","angle":-35.61,"dist":400.0,"hr":2,"rank":18},{"section":"339","angle":-21.31,"dist":421.0,"hr":2,"rank":18},{"section":"138","angle":-17.53,"dist":435.0,"hr":1,"rank":21},{"section":"235","angle":-34.99,"dist":399.0,"hr":1,"rank":21},{"section":"337WC","angle":-29.52,"dist":418.0,"hr":1,"rank":21}]},"Petco Park":{"team":"San Diego Padres","wall":[{"angle":-45,"dist":336},{"angle":-20,"dist":357},{"angle":0,"dist":396},{"angle":20,"dist":391},{"angle":45,"dist":322}],"sections":[{"section":"137","angle":20.55,"dist":406.7,"hr":14,"rank":1},{"section":"BARK 6","angle":-6.84,"dist":417.1,"hr":14,"rank":1},{"section":"126","angle":-37.83,"dist":379.6,"hr":11,"rank":3},{"section":"FIELD RAIL ADA","angle":-32.68,"dist":384.9,"hr":11,"rank":3},{"section":"THE LANDING","angle":-22.31,"dist":397.4,"hr":11,"rank":3},{"section":"127","angle":44.44,"dist":360.6,"hr":8,"rank":6},{"section":"130","angle":-26.11,"dist":391.0,"hr":8,"rank":6},{"section":"THE BEACH","angle":12.93,"dist":409.5,"hr":8,"rank":6},{"section":"129","angle":41.3,"dist":352.8,"hr":6,"rank":9},{"section":"135","angle":25.77,"dist":393.2,"hr":6,"rank":9},{"section":"131","angle":36.8,"dist":404.8,"hr":5,"rank":11},{"section":"132","angle":-20.15,"dist":399.4,"hr":5,"rank":11},{"section":"133","angle":30.55,"dist":400.4,"hr":5,"rank":11},{"section":"231","angle":33.73,"dist":385.0,"hr":5,"rank":11},{"section":"CRAFT PIER","angle":13.09,"dist":409.2,"hr":5,"rank":11},{"section":"POINT ADA","angle":-30.75,"dist":390.0,"hr":5,"rank":11},{"section":"128","angle":-32.32,"dist":375.0,"hr":3,"rank":17},{"section":"228","angle":-25.67,"dist":379.3,"hr":3,"rank":17},{"section":"230","angle":-20.36,"dist":398.7,"hr":3,"rank":17},{"section":"233","angle":28.03,"dist":391.7,"hr":3,"rank":17},{"section":"BARK 1","angle":-16.21,"dist":406.7,"hr":3,"rank":17},{"section":"BARK 2","angle":-14.29,"dist":416.3,"hr":3,"rank":17},{"section":"226","angle":-31.2,"dist":374.0,"hr":2,"rank":23},{"section":"229","angle":38.95,"dist":359.0,"hr":2,"rank":23},{"section":"BARK 4","angle":-10.61,"dist":418.0,"hr":2,"rank":23},{"section":"SUITE 4F","angle":-40.74,"dist":356.5,"hr":2,"rank":23},{"section":"125","angle":43.15,"dist":351.0,"hr":1,"rank":27},{"section":"134","angle":-16.14,"dist":403.0,"hr":1,"rank":27},{"section":"227","angle":44.46,"dist":361.0,"hr":1,"rank":27},{"section":"BARK 3","angle":-12.34,"dist":430.0,"hr":1,"rank":27},{"section":"GALLAGHER SQUARE","angle":-7.72,"dist":401.0,"hr":1,"rank":27},{"section":"PICNIC TERRACE","angle":-8.62,"dist":424.0,"hr":1,"rank":27},{"section":"SUITE 25","angle":75.74,"dist":409.0,"hr":1,"rank":27},{"section":"SUITE 3B","angle":-44.59,"dist":357.0,"hr":1,"rank":27},{"section":"SUITE 3D","angle":-41.41,"dist":344.0,"hr":1,"rank":27},{"section":"SUITE 4E","angle":-42.03,"dist":392.0,"hr":1,"rank":27}]},"Progressive Field":{"team":"Cleveland Guardians","wall":[{"angle":-45,"dist":325},{"angle":-20,"dist":370},{"angle":0,"dist":405},{"angle":20,"dist":375},{"angle":45,"dist":325}],"sections":[{"section":"181","angle":-29.49,"dist":397.8,"hr":15,"rank":1},{"section":"GA SRO","angle":-2.75,"dist":381.3,"hr":14,"rank":2},{"section":"103","angle":21.07,"dist":410.2,"hr":12,"rank":3},{"section":"406","angle":36.81,"dist":377.8,"hr":12,"rank":3},{"section":"180","angle":-35.32,"dist":392.3,"hr":11,"rank":5},{"section":"1011","angle":7.62,"dist":402.5,"hr":10,"rank":6},{"section":"1012","angle":10.74,"dist":405.6,"hr":8,"rank":7},{"section":"182","angle":-23.37,"dist":392.2,"hr":8,"rank":7},{"section":"183","angle":-17.64,"dist":403.0,"hr":8,"rank":7},{"section":"1014","angle":17.1,"dist":395.5,"hr":6,"rank":10},{"section":"111","angle":35.0,"dist":382.7,"hr":6,"rank":10},{"section":"107","angle":24.38,"dist":394.2,"hr":5,"rank":12},{"section":"108","angle":26.36,"dist":391.4,"hr":5,"rank":12},{"section":"109","angle":29.47,"dist":378.4,"hr":5,"rank":12},{"section":"409","angle":43.22,"dist":368.2,"hr":5,"rank":12},{"section":"113","angle":39.11,"dist":376.0,"hr":4,"rank":16},{"section":"185","angle":-7.33,"dist":416.0,"hr":4,"rank":16},{"section":"408","angle":40.97,"dist":367.8,"hr":4,"rank":16},{"section":"1013","angle":13.57,"dist":396.7,"hr":3,"rank":19},{"section":"304","angle":33.4,"dist":409.3,"hr":3,"rank":19},{"section":"309","angle":44.52,"dist":356.3,"hr":3,"rank":19},{"section":"VIEW BULLPEN","angle":40.21,"dist":362.7,"hr":3,"rank":19},{"section":"184","angle":-12.04,"dist":424.0,"hr":2,"rank":23},{"section":"307","angle":38.9,"dist":359.0,"hr":2,"rank":23},{"section":"403","angle":30.87,"dist":367.0,"hr":2,"rank":23},{"section":"405","angle":34.7,"dist":361.0,"hr":2,"rank":23},{"section":"404","angle":32.65,"dist":368.0,"hr":1,"rank":27},{"section":"411","angle":47.84,"dist":380.0,"hr":1,"rank":27}]},"Rate Field":{"team":"Chicago White Sox","wall":[{"angle":-45,"dist":330},{"angle":-20,"dist":375},{"angle":0,"dist":400},{"angle":20,"dist":375},{"angle":45,"dist":335}],"sections":[{"section":"105","angle":31.12,"dist":386.1,"hr":17,"rank":1},{"section":"158","angle":-37.17,"dist":374.5,"hr":17,"rank":1},{"section":"ML STN","angle":37.78,"dist":385.2,"hr":16,"rank":3},{"section":"104","angle":25.97,"dist":388.3,"hr":14,"rank":4},{"section":"159","angle":-31.12,"dist":386.1,"hr":13,"rank":5},{"section":"160","angle":-25.97,"dist":388.9,"hr":12,"rank":6},{"section":"161","angle":-21.01,"dist":403.2,"hr":12,"rank":6},{"section":"ML SRA","angle":39.08,"dist":389.3,"hr":11,"rank":8},{"section":"102","angle":16.19,"dist":398.7,"hr":10,"rank":9},{"section":"162","angle":-16.19,"dist":413.9,"hr":7,"rank":10},{"section":"101","angle":11.64,"dist":402.5,"hr":6,"rank":11},{"section":"103","angle":21.48,"dist":393.5,"hr":6,"rank":11},{"section":"108","angle":47.2,"dist":374.2,"hr":6,"rank":11},{"section":"100","angle":7.99,"dist":406.4,"hr":5,"rank":14},{"section":"156","angle":-47.2,"dist":374.2,"hr":4,"rank":15},{"section":"163","angle":-11.64,"dist":413.2,"hr":4,"rank":15},{"section":"157","angle":-42.77,"dist":384.7,"hr":3,"rank":17},{"section":"164","angle":-7.99,"dist":418.7,"hr":3,"rank":17},{"section":"DECK","angle":0.0,"dist":410.7,"hr":3,"rank":17},{"section":"GA SRO","angle":0.0,"dist":415.5,"hr":2,"rank":20},{"section":"ML PFR","angle":37.95,"dist":388.5,"hr":2,"rank":20},{"section":"ML SEL","angle":38.23,"dist":352.0,"hr":2,"rank":20},{"section":"ML SRO","angle":38.77,"dist":362.0,"hr":2,"rank":20}]},"Rogers Centre":{"team":"Toronto Blue Jays","wall":[{"angle":-45,"dist":328},{"angle":-20,"dist":368},{"angle":0,"dist":400},{"angle":20,"dist":372},{"angle":45,"dist":328}],"sections":[{"section":"GA SRO","angle":-2.33,"dist":414.8,"hr":10,"rank":1},{"section":"SUITE 402","angle":26.14,"dist":391.8,"hr":8,"rank":2},{"section":"SUITE 404","angle":30.36,"dist":398.8,"hr":8,"rank":2},{"section":"SUITE 405","angle":32.71,"dist":389.9,"hr":8,"rank":2},{"section":"148B","angle":-11.56,"dist":409.3,"hr":7,"rank":5},{"section":"BUDWEISER HOME RUN ZONE","angle":-18.61,"dist":414.7,"hr":7,"rank":5},{"section":"SUITE 496","angle":-30.41,"dist":376.7,"hr":7,"rank":5},{"section":"148A","angle":-11.57,"dist":413.2,"hr":6,"rank":8},{"section":"SUITE 400","angle":22.22,"dist":402.7,"hr":6,"rank":8},{"section":"SUITE 492","angle":-39.08,"dist":374.5,"hr":6,"rank":8},{"section":"101A","angle":11.51,"dist":406.6,"hr":5,"rank":11},{"section":"101B","angle":11.5,"dist":416.2,"hr":5,"rank":11},{"section":"102A","angle":15.48,"dist":404.8,"hr":5,"rank":11},{"section":"145B","angle":-25.51,"dist":406.0,"hr":5,"rank":11},{"section":"206","angle":34.52,"dist":374.4,"hr":5,"rank":11},{"section":"SUITE 403","angle":28.18,"dist":380.6,"hr":5,"rank":11},{"section":"SUITE 407","angle":36.98,"dist":394.0,"hr":5,"rank":11},{"section":"SUITE 410","angle":43.47,"dist":377.0,"hr":5,"rank":11},{"section":"SUITE 498","angle":-26.18,"dist":385.4,"hr":5,"rank":11},{"section":"102B","angle":15.28,"dist":399.8,"hr":4,"rank":20},{"section":"103A","angle":20.4,"dist":407.8,"hr":4,"rank":20},{"section":"142","angle":-40.04,"dist":375.5,"hr":4,"rank":20},{"section":"147A","angle":-15.54,"dist":433.2,"hr":4,"rank":20},{"section":"147B","angle":-15.34,"dist":421.8,"hr":4,"rank":20},{"section":"242","angle":-34.42,"dist":377.8,"hr":4,"rank":20},{"section":"SUITE 408","angle":39.05,"dist":353.2,"hr":4,"rank":20},{"section":"SUITE 495","angle":-32.55,"dist":414.8,"hr":4,"rank":20},{"section":"SUITE 549B","angle":-22.26,"dist":392.5,"hr":4,"rank":20},{"section":"THE CORONA ROOFTOP PATIO","angle":24.36,"dist":402.8,"hr":4,"rank":20},{"section":"144B","angle":-30.56,"dist":385.0,"hr":3,"rank":30},{"section":"146B","angle":-20.46,"dist":414.7,"hr":3,"rank":30},{"section":"205","angle":29.15,"dist":385.0,"hr":3,"rank":30},{"section":"244","angle":-23.16,"dist":422.0,"hr":3,"rank":30},{"section":"DECK","angle":0.1,"dist":416.7,"hr":3,"rank":30},{"section":"ROGERS LANDING","angle":40.41,"dist":384.3,"hr":3,"rank":30},{"section":"SUITE 359","angle":-40.41,"dist":393.0,"hr":3,"rank":30},{"section":"SUITE 406","angle":34.76,"dist":404.3,"hr":3,"rank":30},{"section":"SUITE 491","angle":-41.36,"dist":384.0,"hr":3,"rank":30},{"section":"SUITE 493","angle":-37.02,"dist":371.3,"hr":3,"rank":30},{"section":"SUITE 494","angle":-34.8,"dist":380.7,"hr":3,"rank":30},{"section":"SUITE 498A","angle":-24.16,"dist":403.3,"hr":3,"rank":30},{"section":"103B","angle":20.41,"dist":392.5,"hr":2,"rank":42},{"section":"104B","angle":26.43,"dist":385.5,"hr":2,"rank":42},{"section":"105","angle":33.47,"dist":364.0,"hr":2,"rank":42},{"section":"204","angle":23.43,"dist":420.5,"hr":2,"rank":42},{"section":"241","angle":-39.53,"dist":392.0,"hr":2,"rank":42},{"section":"243","angle":-28.85,"dist":394.5,"hr":2,"rank":42},{"section":"PARK SOCIAL","angle":-24.4,"dist":397.0,"hr":2,"rank":42},{"section":"SUITE 357","angle":-44.57,"dist":388.5,"hr":2,"rank":42},{"section":"SUITE 358","angle":-42.47,"dist":363.5,"hr":2,"rank":42},{"section":"SUITE 409","angle":41.32,"dist":385.5,"hr":2,"rank":42},{"section":"143","angle":-35.58,"dist":393.0,"hr":1,"rank":52},{"section":"145A","angle":-25.16,"dist":391.0,"hr":1,"rank":52},{"section":"146A","angle":-20.35,"dist":395.0,"hr":1,"rank":52},{"section":"207","angle":39.75,"dist":373.0,"hr":1,"rank":52},{"section":"SCHNEIDERS PORCH","angle":45.34,"dist":360.0,"hr":1,"rank":52},{"section":"SUITE 489","angle":-45.7,"dist":401.0,"hr":1,"rank":52},{"section":"SUITE 497","angle":-28.22,"dist":383.0,"hr":1,"rank":52},{"section":"THE CATCH BAR","angle":33.48,"dist":367.0,"hr":1,"rank":52}]},"T-Mobile Park":{"team":"Seattle Mariners","wall":[{"angle":-45,"dist":331},{"angle":-20,"dist":378},{"angle":0,"dist":401},{"angle":20,"dist":381},{"angle":45,"dist":326}],"sections":[{"section":"184","angle":-29.05,"dist":393.5,"hr":17,"rank":1},{"section":"183","angle":-33.96,"dist":400.3,"hr":14,"rank":2},{"section":"185","angle":-24.18,"dist":391.1,"hr":14,"rank":2},{"section":"106","angle":23.98,"dist":391.9,"hr":9,"rank":4},{"section":"186","angle":-19.45,"dist":402.6,"hr":9,"rank":4},{"section":"EDGARS CANTINA","angle":-38.32,"dist":384.4,"hr":8,"rank":6},{"section":"GA SRO","angle":-10.15,"dist":405.8,"hr":8,"rank":6},{"section":"191","angle":-0.53,"dist":421.1,"hr":7,"rank":8},{"section":"192","angle":3.82,"dist":413.7,"hr":6,"rank":9},{"section":"HIT IT HERE CAFE OUTSIDE 1","angle":26.78,"dist":398.5,"hr":6,"rank":9},{"section":"104","angle":15.11,"dist":406.8,"hr":5,"rank":11},{"section":"105","angle":19.63,"dist":405.6,"hr":5,"rank":11},{"section":"151","angle":-43.56,"dist":382.2,"hr":5,"rank":11},{"section":"187","angle":-15.95,"dist":419.8,"hr":5,"rank":11},{"section":"HIT IT HERE CAFE OUTSIDE 8","angle":33.97,"dist":378.2,"hr":5,"rank":11},{"section":"103","angle":11.73,"dist":411.0,"hr":4,"rank":16},{"section":"181","angle":-44.91,"dist":362.0,"hr":4,"rank":16},{"section":"HIT IT HERE CAFE OUTSIDE 10","angle":36.09,"dist":390.0,"hr":4,"rank":16},{"section":"195","angle":17.25,"dist":399.7,"hr":3,"rank":19},{"section":"HIT IT HERE CAFE INSIDE 10","angle":39.21,"dist":376.3,"hr":3,"rank":19},{"section":"HIT IT HERE CAFE INSIDE 11","angle":40.28,"dist":367.0,"hr":3,"rank":19},{"section":"102","angle":8.38,"dist":427.5,"hr":2,"rank":22},{"section":"194","angle":13.41,"dist":400.5,"hr":2,"rank":22},{"section":"307","angle":36.53,"dist":355.5,"hr":2,"rank":22},{"section":"EDGARS PORCH","angle":-39.76,"dist":365.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE INSIDE 1","angle":38.53,"dist":379.5,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE INSIDE 2","angle":39.89,"dist":389.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE INSIDE 6","angle":44.45,"dist":353.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE INSIDE LOWER","angle":43.26,"dist":357.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 11","angle":37.43,"dist":370.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 12","angle":27.56,"dist":389.5,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 17","angle":32.45,"dist":385.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 20","angle":35.57,"dist":413.5,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 22","angle":37.91,"dist":352.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 3","angle":28.82,"dist":378.0,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 5","angle":30.79,"dist":415.5,"hr":2,"rank":22},{"section":"HIT IT HERE CAFE OUTSIDE 7","angle":33.1,"dist":359.5,"hr":2,"rank":22},{"section":"107","angle":29.46,"dist":378.0,"hr":1,"rank":38},{"section":"108","angle":35.7,"dist":362.0,"hr":1,"rank":38},{"section":"109","angle":41.75,"dist":362.0,"hr":1,"rank":38},{"section":"182","angle":-39.56,"dist":396.0,"hr":1,"rank":38},{"section":"190","angle":-4.47,"dist":418.0,"hr":1,"rank":38},{"section":"308","angle":40.9,"dist":345.0,"hr":1,"rank":38},{"section":"309","angle":46.14,"dist":383.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE INSIDE 13","angle":42.46,"dist":351.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE INSIDE 15","angle":44.69,"dist":337.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE INSIDE UPPER","angle":43.6,"dist":384.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE OUTSIDE 13","angle":28.34,"dist":375.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE OUTSIDE 15","angle":30.5,"dist":456.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE OUTSIDE 18","angle":33.54,"dist":391.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE OUTSIDE 6","angle":31.81,"dist":370.0,"hr":1,"rank":38},{"section":"HIT IT HERE CAFE OUTSIDE 9","angle":35.02,"dist":389.0,"hr":1,"rank":38},{"section":"SUITE B","angle":44.71,"dist":361.0,"hr":1,"rank":38},{"section":"SUITE F","angle":34.72,"dist":355.0,"hr":1,"rank":38}]},"Target Field":{"team":"Minnesota Twins","wall":[{"angle":-45,"dist":339},{"angle":-20,"dist":377},{"angle":0,"dist":404},{"angle":20,"dist":367},{"angle":45,"dist":328}],"sections":[{"section":"138","angle":37.67,"dist":385.5,"hr":19,"rank":1},{"section":"139","angle":42.91,"dist":372.2,"hr":13,"rank":2},{"section":"329","angle":-40.36,"dist":387.8,"hr":12,"rank":3},{"section":"137","angle":33.4,"dist":393.0,"hr":10,"rank":4},{"section":"136","angle":29.3,"dist":387.9,"hr":9,"rank":5},{"section":"128","angle":-40.58,"dist":370.0,"hr":8,"rank":6},{"section":"135","angle":25.38,"dist":408.4,"hr":8,"rank":6},{"section":"240","angle":27.82,"dist":393.5,"hr":8,"rank":6},{"section":"330","angle":-34.53,"dist":403.1,"hr":8,"rank":6},{"section":"333","angle":-15.79,"dist":411.8,"hr":8,"rank":6},{"section":"239","angle":20.72,"dist":404.1,"hr":7,"rank":11},{"section":"331","angle":-29.38,"dist":408.1,"hr":7,"rank":11},{"section":"SUITE","angle":-3.73,"dist":437.3,"hr":6,"rank":13},{"section":"134","angle":20.7,"dist":416.4,"hr":5,"rank":14},{"section":"232","angle":-23.42,"dist":409.8,"hr":5,"rank":14},{"section":"332","angle":-21.88,"dist":416.0,"hr":5,"rank":14},{"section":"129","angle":-32.41,"dist":382.2,"hr":4,"rank":17},{"section":"133","angle":14.74,"dist":415.0,"hr":4,"rank":17},{"section":"231","angle":-28.92,"dist":384.8,"hr":4,"rank":17},{"section":"233","angle":-17.34,"dist":401.5,"hr":4,"rank":17},{"section":"234","angle":-10.75,"dist":422.0,"hr":4,"rank":17},{"section":"130","angle":-26.0,"dist":431.0,"hr":3,"rank":22},{"section":"132","angle":8.87,"dist":425.0,"hr":3,"rank":22},{"section":"237","angle":9.93,"dist":427.3,"hr":3,"rank":22},{"section":"230","angle":-34.83,"dist":374.0,"hr":2,"rank":25},{"section":"238","angle":13.47,"dist":426.5,"hr":2,"rank":25},{"section":"334","angle":-10.69,"dist":432.0,"hr":2,"rank":25},{"section":"131","angle":-21.32,"dist":396.0,"hr":1,"rank":28},{"section":"229","angle":-41.05,"dist":395.0,"hr":1,"rank":28},{"section":"DECK","angle":-49.63,"dist":361.0,"hr":1,"rank":28}]},"Truist Park":{"team":"Atlanta Braves","wall":[{"angle":-45,"dist":335},{"angle":-20,"dist":385},{"angle":0,"dist":400},{"angle":20,"dist":375},{"angle":45,"dist":325}],"sections":[{"section":"151","angle":-8.65,"dist":425.7,"hr":21,"rank":1},{"section":"SRO","angle":-4.37,"dist":424.4,"hr":20,"rank":2},{"section":"159","angle":39.7,"dist":387.3,"hr":18,"rank":3},{"section":"146","angle":-34.27,"dist":415.4,"hr":15,"rank":4},{"section":"158","angle":34.1,"dist":381.8,"hr":13,"rank":5},{"section":"147","angle":-28.85,"dist":410.5,"hr":11,"rank":6},{"section":"154","angle":18.54,"dist":414.7,"hr":11,"rank":6},{"section":"157","angle":28.69,"dist":400.6,"hr":11,"rank":6},{"section":"155","angle":23.6,"dist":422.0,"hr":10,"rank":9},{"section":"153","angle":13.22,"dist":418.3,"hr":9,"rank":10},{"section":"148","angle":-23.36,"dist":420.5,"hr":8,"rank":11},{"section":"145","angle":-38.83,"dist":388.6,"hr":7,"rank":12},{"section":"149","angle":-18.01,"dist":420.3,"hr":7,"rank":12},{"section":"301XFINITYCABANA","angle":43.46,"dist":381.4,"hr":7,"rank":12},{"section":"150","angle":-12.98,"dist":422.8,"hr":5,"rank":15},{"section":"156","angle":24.7,"dist":406.2,"hr":5,"rank":15},{"section":"346","angle":-43.33,"dist":355.2,"hr":5,"rank":15},{"section":"152","angle":8.45,"dist":413.0,"hr":4,"rank":18},{"section":"347","angle":-39.11,"dist":387.8,"hr":4,"rank":18},{"section":"144","angle":-43.02,"dist":378.3,"hr":3,"rank":20},{"section":"160","angle":43.75,"dist":375.5,"hr":2,"rank":21},{"section":"DUGOUT CORNER 42","angle":-48.06,"dist":357.0,"hr":1,"rank":22}]},"UNIQLO Field at Dodger Stadium":{"team":"Los Angeles Dodgers","wall":[{"angle":-45,"dist":330},{"angle":-20,"dist":375},{"angle":0,"dist":400},{"angle":20,"dist":375},{"angle":45,"dist":330}],"sections":[{"section":"301PL","angle":-32.3,"dist":392.5,"hr":22,"rank":1},{"section":"304PR","angle":26.97,"dist":399.6,"hr":17,"rank":2},{"section":"307PL","angle":-21.72,"dist":402.2,"hr":17,"rank":2},{"section":"303PL","angle":-29.18,"dist":391.1,"hr":14,"rank":4},{"section":"53FD","angle":-38.86,"dist":386.3,"hr":13,"rank":5},{"section":"302PR","angle":30.38,"dist":405.6,"hr":11,"rank":6},{"section":"311PL","angle":-13.28,"dist":405.3,"hr":11,"rank":6},{"section":"315PL","angle":-5.9,"dist":410.3,"hr":11,"rank":6},{"section":"PAVILION SRO","angle":-1.04,"dist":416.2,"hr":11,"rank":6},{"section":"316PR","angle":3.76,"dist":420.8,"hr":10,"rank":10},{"section":"309PL","angle":-16.69,"dist":400.3,"hr":9,"rank":11},{"section":"313PL","angle":-9.16,"dist":416.9,"hr":9,"rank":11},{"section":"314PR","angle":6.68,"dist":413.5,"hr":8,"rank":13},{"section":"LEFT HOME RUN SEATS C","angle":-16.06,"dist":400.0,"hr":8,"rank":13},{"section":"RIGHT HOME RUN SEATS B","angle":17.62,"dist":400.5,"hr":8,"rank":13},{"section":"305PL","angle":-25.19,"dist":402.1,"hr":7,"rank":16},{"section":"RIGHT HOME RUN SEATS C","angle":13.54,"dist":400.6,"hr":7,"rank":16},{"section":"308PR","angle":19.51,"dist":395.7,"hr":6,"rank":18},{"section":"306PR","angle":23.14,"dist":397.6,"hr":5,"rank":19},{"section":"50FD","angle":39.15,"dist":378.8,"hr":5,"rank":19},{"section":"LEFT HOME RUN SEATS D","angle":-12.19,"dist":411.8,"hr":5,"rank":19},{"section":"310PR","angle":14.33,"dist":394.5,"hr":4,"rank":22},{"section":"312PR","angle":10.76,"dist":401.2,"hr":4,"rank":22},{"section":"RIGHT HOME RUN SEATS D","angle":9.68,"dist":405.8,"hr":4,"rank":22},{"section":"52FD","angle":36.78,"dist":413.7,"hr":3,"rank":25},{"section":"LEFT HOME RUN SEATS A","angle":-24.3,"dist":401.3,"hr":3,"rank":25},{"section":"LEFT HOME RUN SEATS B","angle":-20.12,"dist":388.3,"hr":3,"rank":25},{"section":"167LG","angle":-42.77,"dist":371.5,"hr":2,"rank":28},{"section":"34BL","angle":43.02,"dist":365.0,"hr":2,"rank":28},{"section":"40BL","angle":41.31,"dist":368.0,"hr":2,"rank":28},{"section":"45BL","angle":-43.27,"dist":382.5,"hr":2,"rank":28},{"section":"51FD","angle":-41.25,"dist":393.5,"hr":2,"rank":28},{"section":"259CL","angle":-46.57,"dist":376.0,"hr":1,"rank":33},{"section":"261CL","angle":-43.98,"dist":342.0,"hr":1,"rank":33},{"section":"36BL","angle":41.96,"dist":396.0,"hr":1,"rank":33},{"section":"43BL","angle":-43.44,"dist":341.0,"hr":1,"rank":33},{"section":"44BL","angle":40.58,"dist":403.0,"hr":1,"rank":33},{"section":"46FD","angle":45.08,"dist":350.0,"hr":1,"rank":33},{"section":"RIGHT HOME RUN SEATS A","angle":21.83,"dist":379.0,"hr":1,"rank":33}]},"Wrigley Field":{"team":"Chicago Cubs","wall":[{"angle":-45,"dist":355},{"angle":-20,"dist":368},{"angle":0,"dist":400},{"angle":20,"dist":368},{"angle":45,"dist":353}],"sections":[{"section":"BLEACHERS","angle":-13.64,"dist":394.3,"hr":150,"rank":1},{"section":"BUDWEISER PATIO 516","angle":39.9,"dist":389.0,"hr":12,"rank":2},{"section":"FIELD ADA","angle":12.19,"dist":405.8,"hr":8,"rank":3},{"section":"LG PORCH","angle":-14.99,"dist":397.0,"hr":7,"rank":4},{"section":"FIELD PORCH","angle":29.49,"dist":391.0,"hr":6,"rank":5},{"section":"BUDWEISER PATIO 517","angle":44.59,"dist":382.0,"hr":4,"rank":6},{"section":"THE YARD 0","angle":-4.47,"dist":419.0,"hr":4,"rank":6},{"section":"HORNITOS HACIENDA","angle":-37.49,"dist":387.7,"hr":3,"rank":8},{"section":"THE YARD 2","angle":-0.29,"dist":420.3,"hr":3,"rank":8},{"section":"THE YARD 3","angle":1.75,"dist":424.0,"hr":3,"rank":8},{"section":"THE YARD 1","angle":-2.36,"dist":417.0,"hr":1,"rank":11}]},"Yankee Stadium":{"team":"New York Yankees","wall":[{"angle":-45,"dist":318},{"angle":-20,"dist":399},{"angle":0,"dist":408},{"angle":20,"dist":385},{"angle":45,"dist":314}],"sections":[{"section":"BLEACHERS 202","angle":16.68,"dist":402.0,"hr":30,"rank":1},{"section":"LEVEL 104","angle":29.15,"dist":377.0,"hr":29,"rank":2},{"section":"BLEACHERS 203","angle":23.06,"dist":390.4,"hr":21,"rank":3},{"section":"SUITE 2","angle":36.31,"dist":366.8,"hr":11,"rank":4},{"section":"LEVEL 107","angle":45.61,"dist":365.3,"hr":10,"rank":5},{"section":"BUDWEISER HALL OF FAME LOUNGE","angle":-39.18,"dist":379.1,"hr":8,"rank":6},{"section":"LEVEL 103","angle":20.24,"dist":400.1,"hr":8,"rank":6},{"section":"LEVEL 305","angle":33.11,"dist":376.2,"hr":8,"rank":6},{"section":"SUITE 3","angle":42.09,"dist":376.0,"hr":8,"rank":6},{"section":"BLEACHERS 204","angle":27.54,"dist":369.4,"hr":7,"rank":10},{"section":"BLEACHERS 238","angle":-14.88,"dist":425.6,"hr":7,"rank":10},{"section":"GA SRO","angle":10.68,"dist":417.4,"hr":7,"rank":10},{"section":"BLEACHERS 236","angle":-26.99,"dist":388.5,"hr":6,"rank":13},{"section":"BLEACHERS 237","angle":-20.04,"dist":420.2,"hr":5,"rank":14},{"section":"LEVEL 136","angle":-24.94,"dist":403.0,"hr":5,"rank":14},{"section":"LEVEL 233B","angle":-44.76,"dist":374.6,"hr":5,"rank":14},{"section":"LEVEL 405","angle":34.15,"dist":374.8,"hr":5,"rank":14},{"section":"FIELD SPORTS BAR 3","angle":2.09,"dist":420.8,"hr":4,"rank":18},{"section":"LEVEL 133","angle":-41.9,"dist":381.8,"hr":4,"rank":18},{"section":"LEVEL 206","angle":40.38,"dist":359.8,"hr":4,"rank":18},{"section":"LEVEL 234","angle":-35.91,"dist":411.0,"hr":4,"rank":18},{"section":"SUITE 1","angle":31.79,"dist":385.2,"hr":4,"rank":18},{"section":"FIELD SPORTS BAR 1","angle":-4.93,"dist":427.3,"hr":3,"rank":23},{"section":"LEVEL 106","angle":40.06,"dist":364.3,"hr":3,"rank":23},{"section":"LEVEL 205","angle":31.18,"dist":383.7,"hr":3,"rank":23},{"section":"FRESHDIRECT TERRACE","angle":-9.57,"dist":438.5,"hr":2,"rank":26},{"section":"LEVEL 135","angle":-31.54,"dist":393.0,"hr":2,"rank":26},{"section":"TOYOTA TERRACE","angle":10.85,"dist":413.5,"hr":2,"rank":26},{"section":"BLEACHERS 235","angle":-32.1,"dist":381.0,"hr":1,"rank":29},{"section":"FIELD SPORTS BAR 4","angle":5.52,"dist":421.0,"hr":1,"rank":29},{"section":"LEVEL 105","angle":33.98,"dist":356.0,"hr":1,"rank":29},{"section":"LEVEL 132","angle":-46.98,"dist":399.0,"hr":1,"rank":29},{"section":"LEVEL 134","angle":-36.99,"dist":394.0,"hr":1,"rank":29},{"section":"LEVEL 207","angle":46.51,"dist":361.0,"hr":1,"rank":29},{"section":"LEVEL 306","angle":41.37,"dist":334.0,"hr":1,"rank":29},{"section":"LEVEL 406","angle":41.52,"dist":337.0,"hr":1,"rank":29},{"section":"LEVEL 407A","angle":47.55,"dist":376.0,"hr":1,"rank":29}]},"loanDepot park":{"team":"Miami Marlins","wall":[{"angle":-45,"dist":344},{"angle":-20,"dist":386},{"angle":0,"dist":400},{"angle":20,"dist":392},{"angle":45,"dist":335}],"sections":[{"section":"30","angle":-37.26,"dist":393.6,"hr":19,"rank":1},{"section":"134","angle":2.17,"dist":415.6,"hr":13,"rank":2},{"section":"34","angle":6.54,"dist":409.6,"hr":13,"rank":2},{"section":"137","angle":21.76,"dist":403.7,"hr":9,"rank":4},{"section":"138","angle":29.95,"dist":393.8,"hr":9,"rank":4},{"section":"36","angle":17.56,"dist":409.1,"hr":9,"rank":4},{"section":"DECK","angle":-8.14,"dist":414.9,"hr":9,"rank":4},{"section":"139","angle":34.06,"dist":377.5,"hr":8,"rank":8},{"section":"141","angle":42.58,"dist":378.2,"hr":8,"rank":8},{"section":"29","angle":-43.55,"dist":386.2,"hr":8,"rank":8},{"section":"BULLPEN SRO","angle":-19.76,"dist":410.0,"hr":8,"rank":8},{"section":"BULLPEN BAR 2","angle":-24.66,"dist":400.0,"hr":7,"rank":12},{"section":"140","angle":39.37,"dist":380.0,"hr":6,"rank":13},{"section":"40","angle":37.76,"dist":391.0,"hr":5,"rank":14},{"section":"BULLPEN BAR 3","angle":-20.77,"dist":400.2,"hr":5,"rank":14},{"section":"135","angle":8.6,"dist":416.0,"hr":4,"rank":16},{"section":"136","angle":14.78,"dist":411.0,"hr":3,"rank":17},{"section":"31","angle":-30.72,"dist":409.3,"hr":3,"rank":17},{"section":"32","angle":-25.5,"dist":398.3,"hr":3,"rank":17},{"section":"35","angle":12.0,"dist":403.3,"hr":3,"rank":17},{"section":"38","angle":27.39,"dist":394.7,"hr":3,"rank":17},{"section":"AUTONATION ALLEY","angle":-7.95,"dist":419.5,"hr":2,"rank":22},{"section":"39","angle":32.16,"dist":413.0,"hr":1,"rank":23},{"section":"BULLPEN BAR 1","angle":-28.49,"dist":424.0,"hr":1,"rank":23},{"section":"RESERVED 1","angle":48.93,"dist":391.0,"hr":1,"rank":23}]}}
+;
+
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- team list + search ---------- */
+  const TEAM_NAMES = Object.keys(BALLPARKS).map(v => ({ venue: v, team: BALLPARKS[v].team }));
+  TEAM_NAMES.sort((a, b) => a.team.localeCompare(b.team));
+
+  const CITY_HINTS = {
+    "Milwaukee Brewers": "Milwaukee",
+    "Los Angeles Angels": "Anaheim Los Angeles",
+    "St. Louis Cardinals": "St. Louis",
+    "Arizona Diamondbacks": "Phoenix Arizona",
+    "New York Mets": "New York Queens",
+    "Philadelphia Phillies": "Philadelphia",
+    "Detroit Tigers": "Detroit",
+    "Colorado Rockies": "Denver Colorado",
+    "Houston Astros": "Houston",
+    "Boston Red Sox": "Boston",
+    "Texas Rangers": "Arlington Dallas Texas",
+    "Cincinnati Reds": "Cincinnati",
+    "Kansas City Royals": "Kansas City",
+    "Washington Nationals": "Washington DC",
+    "San Francisco Giants": "San Francisco",
+    "Baltimore Orioles": "Baltimore",
+    "Pittsburgh Pirates": "Pittsburgh",
+    "San Diego Padres": "San Diego",
+    "Cleveland Guardians": "Cleveland",
+    "Chicago White Sox": "Chicago South Side",
+    "Toronto Blue Jays": "Toronto Ontario Canada",
+    "Seattle Mariners": "Seattle",
+    "Minnesota Twins": "Minneapolis Minnesota",
+    "Atlanta Braves": "Atlanta",
+    "Los Angeles Dodgers": "Los Angeles",
+    "Chicago Cubs": "Chicago North Side",
+    "New York Yankees": "New York Bronx",
+    "Miami Marlins": "Miami"
+  };
+
+  const input = document.getElementById("team-input");
+  const dropdown = document.getElementById("team-dropdown");
+  const clearBtn = document.getElementById("team-clear");
+  const quickTeams = document.getElementById("quick-teams");
+
+  const QUICK = ["Toronto Blue Jays", "New York Yankees", "Los Angeles Dodgers", "Boston Red Sox", "Chicago Cubs", "Atlanta Braves"];
+  QUICK.forEach(team => {
+    const entry = TEAM_NAMES.find(t => t.team === team);
+    if (!entry) return;
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "quick-chip";
+    chip.textContent = entry.team;
+    chip.addEventListener("click", () => { input.value = entry.team; loadVenue(entry.venue); closeDropdown(); });
+    quickTeams.appendChild(chip);
+  });
+
+  function matches(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    return TEAM_NAMES.filter(t => {
+      const hay = (t.team + " " + t.venue + " " + (CITY_HINTS[t.team] || "")).toLowerCase();
+      return hay.includes(q);
+    }).slice(0, 12);
+  }
+
+  function renderDropdown(list) {
+    dropdown.innerHTML = "";
+    if (!list.length) { closeDropdown(); return; }
+    list.forEach(t => {
+      const row = document.createElement("div");
+      row.className = "team-opt";
+      row.innerHTML = `<span>${t.team}</span><small>${t.venue}</small>`;
+      row.addEventListener("click", () => {
+        input.value = t.team;
+        loadVenue(t.venue);
+        closeDropdown();
+      });
+      dropdown.appendChild(row);
+    });
+    dropdown.classList.add("open");
+  }
+
+  function closeDropdown() { dropdown.classList.remove("open"); }
+
+  input.addEventListener("input", () => {
+    clearBtn.style.display = input.value ? "inline-block" : "none";
+    renderDropdown(matches(input.value));
+  });
+  input.addEventListener("focus", () => { if (input.value) renderDropdown(matches(input.value)); });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-row") && !e.target.closest("#team-dropdown")) closeDropdown();
+  });
+  clearBtn.addEventListener("click", () => {
+    input.value = "";
+    clearBtn.style.display = "none";
+    closeDropdown();
+    input.focus();
+  });
+
+  /* ---------- geometry + clustering ---------- */
+  const svgNS = "http://www.w3.org/2000/svg";
+  const W = 700, H = 560;
+  const originX = W / 2, originY = H - 34;
+
+  function toXY(angleDeg, distFt, scale) {
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    const x = originX + distFt * scale * Math.cos(rad);
+    const y = originY + distFt * scale * Math.sin(rad);
+    return [x, y];
+  }
+
+  // Group sections into radial clusters by angular proximity, then spread
+  // members of a crowded cluster outward along their own true angle so
+  // wedges never sit on top of each other. Sections whose true angle AND
+  // true distance are both nearly identical are flagged as "stacked" --
+  // real seats stacked one level above another -- and get a direct
+  // connector line drawn between their two display positions.
+  function computeLayout(sections) {
+    const sorted = sections.slice().sort((a, b) => a.angle - b.angle);
+    const clusters = [];
+    let current = [];
+    sorted.forEach((s, i) => {
+      if (i === 0) { current = [s]; return; }
+      if (s.angle - sorted[i - 1].angle <= 4.2) {
+        current.push(s);
+      } else {
+        clusters.push(current);
+        current = [s];
+      }
+    });
+    if (current.length) clusters.push(current);
+
+    const spacing = 27;
+    clusters.forEach(cluster => {
+      if (cluster.length === 1) {
+        cluster[0].displayDist = cluster[0].dist;
+        cluster[0].displayOffset = 0;
+        return;
+      }
+      const byDist = cluster.slice().sort((a, b) => a.dist - b.dist);
+      const base = byDist[0].dist;
+      byDist.forEach((s, i) => {
+        s.displayDist = base + i * spacing;
+        s.displayOffset = s.displayDist - s.dist;
+      });
+    });
+
+    // stacked pairs: same physical column of seats, different level
+    const stackPairs = [];
+    clusters.forEach(cluster => {
+      for (let i = 0; i < cluster.length; i++) {
+        for (let j = i + 1; j < cluster.length; j++) {
+          const a = cluster[i], b = cluster[j];
+          if (Math.abs(a.angle - b.angle) < 1.3 && Math.abs(a.dist - b.dist) < 9) {
+            stackPairs.push([a, b]);
+          }
+        }
+      }
+    });
+
+    return { stackPairs };
+  }
+
+  function colorFor(hr, maxHr) {
+    const t = maxHr ? hr / maxHr : 0;
+    const r1 = 255, g1 = 233, b1 = 234, r2 = 206, g2 = 17, b2 = 38;
+    const r = Math.round(r1 + (r2 - r1) * t), g = Math.round(g1 + (g2 - g1) * t), b = Math.round(b1 + (b2 - b1) * t);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  /* ---------- rendering ---------- */
+  const resultWrap = document.getElementById("result-wrap");
+  const svgHost = document.getElementById("field-svg-wrap");
+  const detailPanel = document.getElementById("detail-panel");
+  const activeLabel = document.getElementById("active-section-label");
+  const leaderboardEl = document.getElementById("leaderboard");
+  const methodBox = document.getElementById("method-box");
+
+  function loadVenue(venueName) {
+    const park = BALLPARKS[venueName];
+    if (!park) return;
+    resultWrap.style.display = "block";
+    document.getElementById("result-venue-name").textContent = park.team;
+    document.getElementById("result-venue-sub").textContent = venueName;
+    document.getElementById("diagram-title").textContent = venueName + " \u00b7 Outfield Section Map";
+
+    const sections = park.sections.map(s => Object.assign({}, s));
+    const { stackPairs } = computeLayout(sections);
+    const maxHr = Math.max(...sections.map(s => s.hr));
+    const maxDisplayDist = Math.max(...sections.map(s => s.displayDist), ...park.wall.map(p => p.dist));
+    const scale = (originY - 40) / (maxDisplayDist + 20);
+
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("id", "field");
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+
+    // wall outline
+    let wallD = "";
+    park.wall.forEach((p, i) => {
+      const [x, y] = toXY(p.angle, p.dist, scale);
+      wallD += (i === 0 ? "M" : "L") + x.toFixed(1) + "," + y.toFixed(1) + " ";
+    });
+    const wallPath = document.createElementNS(svgNS, "path");
+    wallPath.setAttribute("d", wallD.trim());
+    wallPath.setAttribute("class", "wall-outline");
+    svg.appendChild(wallPath);
+
+    // foul lines
+    [park.wall[0], park.wall[park.wall.length - 1]].forEach(p => {
+      const [x, y] = toXY(p.angle, p.dist, scale);
+      const line = document.createElementNS(svgNS, "line");
+      line.setAttribute("x1", originX); line.setAttribute("y1", originY);
+      line.setAttribute("x2", x); line.setAttribute("y2", y);
+      line.setAttribute("class", "foul-line");
+      svg.appendChild(line);
+    });
+
+    // home plate
+    const plate = document.createElementNS(svgNS, "circle");
+    plate.setAttribute("cx", originX); plate.setAttribute("cy", originY); plate.setAttribute("r", 4);
+    plate.setAttribute("class", "home-plate");
+    svg.appendChild(plate);
+
+    const wedgeWidthDeg = 4.6;
+    const wedgeDepthFt = 20;
+    const wedgeByKey = {};
+
+    sections.forEach(s => {
+      const displayDist = s.displayDist;
+
+      if ((s.displayOffset || 0) > 12) {
+        const [tx, ty] = toXY(s.angle, s.dist, scale);
+        const [dx, dy] = toXY(s.angle, displayDist - wedgeDepthFt / 2, scale);
+        const link = document.createElementNS(svgNS, "line");
+        link.setAttribute("x1", tx); link.setAttribute("y1", ty);
+        link.setAttribute("x2", dx); link.setAttribute("y2", dy);
+        link.setAttribute("class", "section-link");
+        svg.appendChild(link);
+
+        const anchor = document.createElementNS(svgNS, "circle");
+        anchor.setAttribute("cx", tx); anchor.setAttribute("cy", ty); anchor.setAttribute("r", 2.2);
+        anchor.setAttribute("class", "section-anchor");
+        svg.appendChild(anchor);
+      }
+
+      const innerDist = displayDist - wedgeDepthFt / 2;
+      const outerDist = displayDist + wedgeDepthFt / 2;
+      const a1 = s.angle - wedgeWidthDeg / 2, a2 = s.angle + wedgeWidthDeg / 2;
+      const p1 = toXY(a1, innerDist, scale), p2 = toXY(a2, innerDist, scale), p3 = toXY(a2, outerDist, scale), p4 = toXY(a1, outerDist, scale);
+
+      const path = document.createElementNS(svgNS, "path");
+      path.setAttribute("d", `M${p1[0]},${p1[1]} L${p2[0]},${p2[1]} L${p3[0]},${p3[1]} L${p4[0]},${p4[1]} Z`);
+      path.setAttribute("fill", colorFor(s.hr, maxHr));
+      path.setAttribute("stroke", "rgba(16,24,32,.78)");
+      path.setAttribute("stroke-width", "1.4");
+      path.setAttribute("class", "section-wedge");
+      path.setAttribute("tabindex", "0");
+      path.setAttribute("role", "button");
+      path.setAttribute("aria-label", `${s.section}: ${s.hr} home runs in 2025`);
+
+      const title = document.createElementNS(svgNS, "title");
+      title.textContent = `${s.section} \u00b7 ${s.hr} HR`;
+      path.appendChild(title);
+
+      path.addEventListener("click", () => selectSection(s, path, stackPairs));
+      path.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectSection(s, path, stackPairs); }
+      });
+      svg.appendChild(path);
+      wedgeByKey[s.section] = { s, displayDist };
+    });
+
+    // stacked-section connectors, drawn after wedges so they read on top
+    stackPairs.forEach(([a, b]) => {
+      const [ax, ay] = toXY(a.angle, a.displayDist, scale);
+      const [bx, by] = toXY(b.angle, b.displayDist, scale);
+      const link = document.createElementNS(svgNS, "line");
+      link.setAttribute("x1", ax); link.setAttribute("y1", ay);
+      link.setAttribute("x2", bx); link.setAttribute("y2", by);
+      link.setAttribute("class", "stack-link");
+      svg.appendChild(link);
+
+      const mx = (ax + bx) / 2, my = (ay + by) / 2;
+      const badge = document.createElementNS(svgNS, "circle");
+      badge.setAttribute("cx", mx); badge.setAttribute("cy", my); badge.setAttribute("r", 7);
+      badge.setAttribute("class", "stack-badge");
+      svg.appendChild(badge);
+      const badgeText = document.createElementNS(svgNS, "text");
+      badgeText.setAttribute("x", mx); badgeText.setAttribute("y", my + 2.6);
+      badgeText.setAttribute("class", "stack-badge-text");
+      badgeText.textContent = "S";
+      svg.appendChild(badgeText);
+
+      const tt = document.createElementNS(svgNS, "title");
+      tt.textContent = `${a.section} and ${b.section} are stacked seating levels at the same spot on the field`;
+      badge.appendChild(tt);
+    });
+
+    // field labels
+    const cf = park.wall.find(p => p.angle === 0) || park.wall[Math.floor(park.wall.length / 2)];
+    [["LF", park.wall[0].angle, park.wall[0].dist - 30], ["CF", 0, cf.dist + 4], ["RF", park.wall[park.wall.length - 1].angle, park.wall[park.wall.length - 1].dist - 30]].forEach(([label, ang, dist]) => {
+      const [x, y] = toXY(ang, dist, scale);
+      const text = document.createElementNS(svgNS, "text");
+      text.setAttribute("x", x); text.setAttribute("y", y);
+      text.setAttribute("class", "field-label");
+      text.setAttribute("text-anchor", "middle");
+      text.textContent = label;
+      svg.appendChild(text);
+    });
+
+    svgHost.innerHTML = "";
+    svgHost.appendChild(svg);
+
+    activeLabel.textContent = "Select a section";
+    detailPanel.innerHTML = `<div class="detail-empty">Click any section on the diagram to see its 2025 home run count.</div>`;
+
+    // leaderboard
+    const sortedByRank = sections.slice().sort((a, b) => a.rank - b.rank);
+    leaderboardEl.innerHTML = sortedByRank.map(s => `
+      <div class="lb-row" data-section="${s.section}">
+        <div class="lb-rank">#${s.rank}</div>
+        <div class="lb-name">${s.section}</div>
+        <div class="lb-count">${s.hr} HR</div>
+      </div>
+    `).join("");
+
+    Array.from(leaderboardEl.querySelectorAll(".lb-row")).forEach(row => {
+      row.style.cursor = "pointer";
+      row.addEventListener("click", () => {
+        const sec = sections.find(x => x.section === row.dataset.section);
+        const wedge = Array.from(svg.querySelectorAll(".section-wedge")).find(w => w.getAttribute("aria-label").startsWith(sec.section + ":"));
+        if (wedge) selectSection(sec, wedge, stackPairs);
+      });
+    });
+
+    const totalHr = sections.reduce((sum, s) => sum + s.hr, 0);
+    const top = sortedByRank[0];
+    methodBox.innerHTML = `<strong>How this was built:</strong> Every home run hit at ${venueName} in the 2025 regular season was tracked by MLB's Statcast system, converted into a direction and distance from home plate, then matched to the single nearest real seating section using the ballpark's own public seating chart. This ${sections.length}-section park logged ${totalHr} tracked home runs across the season, with ${top.section} landing the most at ${top.hr}. Where sections sit almost on top of one another, such as stacked lower and upper deck seats along the same sightline, the diagram spaces them outward and flags the pair with a gold connector so both remain clickable. The map itself is schematic: each section's direction and distance from home plate is calculated from the real tracking data, but the wedge shapes and outfield wall are simplified for readability rather than drawn to the ballpark's actual seating chart geometry.`;
+
+    function selectSection(s, wedgeEl, stackPairsRef) {
+      const prevActive = svg.querySelector(".section-wedge.is-active");
+      if (prevActive) prevActive.classList.remove("is-active");
+      wedgeEl.classList.add("is-active");
+      activeLabel.textContent = s.section;
+
+      const partner = stackPairsRef.find(pair => pair[0].section === s.section || pair[1].section === s.section);
+      let stackNote = "";
+      if (partner) {
+        const other = partner[0].section === s.section ? partner[1] : partner[0];
+        stackNote = `<div class="detail-stack-note">This section sits in the same physical spot as <strong>${other.section}</strong>, stacked at a different seating level. Connected on the map with a gold line.</div>`;
+      }
+
+      detailPanel.innerHTML = `
+        <div class="detail-rank">#${s.rank}</div>
+        <div class="detail-name">${s.section}</div>
+        <div class="detail-stat"><b>${s.hr}</b><span>2025 Home Runs</span></div>
+        <div class="detail-stat"><b>${s.dist.toFixed(0)} ft</b><span>Avg. Landing Distance</span></div>
+        <div class="detail-stat"><b>${s.angle.toFixed(1)}&deg;</b><span>Direction from Home Plate</span></div>
+        ${stackNote}
+      `;
+
+      Array.from(leaderboardEl.children).forEach(row => row.classList.toggle("is-highlighted", row.dataset.section === s.section));
+    }
+  }
+
+  // default view on load
+  loadVenue("Rogers Centre");
+  input.value = "Toronto Blue Jays";
+})();
+</script>
+</body>
+</html>
