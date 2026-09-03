@@ -163,8 +163,8 @@ svg#field { width: 100%; height: auto; display: block; overflow: visible; }
         <div class="search-row">
           <input type="text" id="team-input" placeholder="e.g. Blue Jays, Toronto, Yankee Stadium..." autocomplete="off">
           <button id="team-clear" type="button">Clear</button>
+          <div id="team-dropdown"></div>
         </div>
-        <div id="team-dropdown"></div>
         <div class="quick-teams" id="quick-teams"></div>
       </div>
 
@@ -599,7 +599,6 @@ const BALLPARKS = {"American Family Field":{"team":"Milwaukee Brewers","wall":[{
 
   // default view on load
   loadVenue("Rogers Centre");
-  input.value = "Toronto Blue Jays";
 })();
 </script>
 </body>
